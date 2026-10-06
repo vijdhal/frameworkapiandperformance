@@ -1,0 +1,49 @@
+name: k6 Performance Tests
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Target environment'
+        required: true
+        default: 'dev'
+        type: choice
+        options: [dev, qa, sit]
+      testType:
+        description: 'Test type'
+        required: true
+        default: 'smoke'
+        type: choice
+        options: [smoke, load, stress, spike, soak]
+
+jobs:
+  k6:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Run k6 (${{ github.event.inputs.testType || 'smoke' }} — ${{ github.event.inputs.environment || 'dev' }})
+        uses: grafana/k6-action@v0.3.1
+        with:
+          filename: tests/${{ github.event.inputs.testType || 'smoke' }}/${{ github.event.inputs.testType || 'smoke' }}-test.js
+          flags: -e ENV=${{ github.event.inputs.environment || 'dev' }}
+        env:
+          # One secret per environment; falls back to environments.json when unset.
+          BASE_URL: ${{ github.event.inputs.environment == 'qa' && secrets.BASE_URL_QA || github.event.inputs.environment == 'sit' && secrets.BASE_URL_SIT || secrets.BASE_URL_DEV }}
+          API_KEY: ${{ secrets.API_KEY }}
+          API_KEY_HEADER: ${{ vars.API_KEY_HEADER }}
+
+      - name: Upload HTML report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: k6-report-${{ github.event.inputs.environment || 'dev' }}
+          path: reports/*.html
+          retention-days: 14

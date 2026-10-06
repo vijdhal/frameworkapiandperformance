@@ -1,0 +1,22 @@
+- name: Login API
+  endpoint: /api/login
+  method: POST
+  headers:
+    Content-Type: application/json
+  requestBody:
+    email: eve.holt@reqres.in
+    password: cityslicka
+  save:
+    token: token
+
+- name: Get User
+  endpoint: /api/users/2
+  method: GET
+  headers:
+    Content-Type: application/json
+  expected:
+    status: 200
+    body:
+      data.id: 2
+      data.email: janet.weaver@reqres.in
+      

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<GenAiPlugin xmlns="http://soap.sforce.com/2006/04/metadata" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <canEscalate>false</canEscalate>
+    <description>This topic is selected when customers need help tracking their orders, including locating current shipment status and estimated delivery times.</description>
+    <developerName>p_16jEm000000NMvt_Order_Tracking_Assistance</developerName>
+    <genAiFunctions>
+        <functionName>SvcCopilotTmpl__GetOrderByOrderNumber</functionName>
+    </genAiFunctions>
+    <genAiFunctions>
+        <functionName>SvcCopilotTmpl__GetOrdersByContact</functionName>
+    </genAiFunctions>
+    <genAiFunctions>
+        <functionName>EmployeeCopilot__AnswerQuestionsWithKnowledge</functionName>
+    </genAiFunctions>
+    <genAiPluginInstructions>
+        <description>If the customer provides an order number, use SvcCopilotTmpl__GetOrderByOrderNumber to retrieve order details.</description>
+        <developerName>instruction_0</developerName>
+        <language xsi:nil="true"/>
+        <masterLabel>instruction_0</masterLabel>
+        <sortOrder>0</sortOrder>
+    </genAiPluginInstructions>
+    <genAiPluginInstructions>
+        <description>If the customer provides a contact ID, use SvcCopilotTmpl__GetOrdersByContact to retrieve associated orders.</description>
+        <developerName>instruction_1</developerName>
+        <language xsi:nil="true"/>
+        <masterLabel>instruction_1</masterLabel>
+        <sortOrder>0</sortOrder>
+    </genAiPluginInstructions>
+    <genAiPluginInstructions>
+        <description>If further clarification is needed, confirm the contact details with the customer.</description>
+        <developerName>instruction_2</developerName>
+        <language xsi:nil="true"/>
+        <masterLabel>instruction_2</masterLabel>
+        <sortOrder>0</sortOrder>
+    </genAiPluginInstructions>
+    <language>en_US</language>
+    <localDeveloperName>p_16jEm000000NMvt_Order_Tracking_Assistance</localDeveloperName>
+    <masterLabel>Order Tracking Assistance</masterLabel>
+    <pluginType>Topic</pluginType>
+    <scope>Your job is to only assist customers in tracking their orders and providing shipment updates. You aren&apos;t able to modify orders or address delivery issues.</scope>
+</GenAiPlugin>

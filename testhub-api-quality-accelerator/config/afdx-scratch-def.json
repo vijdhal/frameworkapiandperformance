@@ -1,0 +1,13 @@
+{
+  "orgName": "TestHub Agentforce Dev",
+  "edition": "Developer",
+  "features": ["Einstein1AIPlatform"],
+  "settings": {
+    "agentPlatformSettings": {
+      "enableAgentPlatform": true
+    },
+    "einsteinGptSettings": {
+      "enableEinsteinGptPlatform": true
+    }
+  }
+}

@@ -1,0 +1,15 @@
+<!doctype html>
+<meta charset="utf-8"><title>Keyword Lab</title>
+<h1 id="heading">Keyword Lab</h1>
+<p id="later" style="display:none">Delayed content is now present</p>
+<label><input type="radio" name="plan" id="planBasic" value="basic"> Basic</label>
+<label><input type="radio" name="plan" id="planPro" value="pro"> Pro</label>
+<button id="warn" onclick="window.__msg = confirm('Delete this record?')">Delete</button>
+<a id="external" href="second.html" target="_blank">Open second page</a>
+<p id="ghost" style="display:none">Delayed content is now present</p>
+<span style="display:none">Only visible copy</span>
+<p id="realcopy">Only visible copy</p>
+<iframe id="inner" src="frame.html" width="300" height="120"></iframe>
+<script>
+  setTimeout(function () { document.getElementById('later').style.display = 'block'; }, 400);
+</script>

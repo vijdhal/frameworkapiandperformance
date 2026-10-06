@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<GenAiPlugin xmlns="http://soap.sforce.com/2006/04/metadata" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <canEscalate>false</canEscalate>
+    <description>This topic is selected when customers report issues related to their delivery, such as delays or incorrect items.</description>
+    <developerName>p_16jcU000001ogMr_Delivery_Issue_Resolution</developerName>
+    <genAiFunctions>
+        <functionName>SvcCopilotTmpl__IdentifyCustomerByEmail</functionName>
+    </genAiFunctions>
+    <genAiFunctions>
+        <functionName>SvcCopilotTmpl__GetOrdersByContact</functionName>
+    </genAiFunctions>
+    <genAiFunctions>
+        <functionName>SvcCopilotTmpl__GetDeliveryTimeSlots</functionName>
+    </genAiFunctions>
+    <genAiFunctions>
+        <functionName>SvcCopilotTmpl__FinalizeNewDeliveryTime</functionName>
+    </genAiFunctions>
+    <genAiFunctions>
+        <functionName>EmployeeCopilot__AnswerQuestionsWithKnowledge</functionName>
+    </genAiFunctions>
+    <genAiPluginInstructions>
+        <description>If the customer provides their email address, use SvcCopilotTmpl__IdentifyCustomerByEmail to retrieve their contact record.</description>
+        <developerName>instruction_0</developerName>
+        <language xsi:nil="true"/>
+        <masterLabel>instruction_0</masterLabel>
+        <sortOrder>0</sortOrder>
+    </genAiPluginInstructions>
+    <genAiPluginInstructions>
+        <description>Use SvcCopilotTmpl__GetOrdersByContact to identify the relevant order.</description>
+        <developerName>instruction_1</developerName>
+        <language xsi:nil="true"/>
+        <masterLabel>instruction_1</masterLabel>
+        <sortOrder>0</sortOrder>
+    </genAiPluginInstructions>
+    <genAiPluginInstructions>
+        <description>If the delivery time needs to be rescheduled, use SvcCopilotTmpl__GetDeliveryTimeSlots to fetch available time slots.</description>
+        <developerName>instruction_2</developerName>
+        <language xsi:nil="true"/>
+        <masterLabel>instruction_2</masterLabel>
+        <sortOrder>0</sortOrder>
+    </genAiPluginInstructions>
+    <genAiPluginInstructions>
+        <description>If the customer selects a time slot, use SvcCopilotTmpl__FinalizeNewDeliveryTime to confirm the updated delivery schedule.</description>
+        <developerName>instruction_3</developerName>
+        <language xsi:nil="true"/>
+        <masterLabel>instruction_3</masterLabel>
+        <sortOrder>0</sortOrder>
+    </genAiPluginInstructions>
+    <language>en_US</language>
+    <localDeveloperName>p_16jcU000001ogMr_Delivery_Issue_Resolution</localDeveloperName>
+    <masterLabel>Delivery Issue Resolution</masterLabel>
+    <pluginType>Topic</pluginType>
+    <scope>Your job is to only address delivery-related concerns by identifying the issue and providing resolution options. You aren&apos;t able to initiate new deliveries or modify unrelated orders.</scope>
+</GenAiPlugin>

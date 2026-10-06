@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<GenAiPlugin xmlns="http://soap.sforce.com/2006/04/metadata" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <canEscalate>false</canEscalate>
+    <description>This topic is used when customers report issues with their deliveries, such as delays, incorrect items, or missed deliveries.</description>
+    <developerName>p_16jEm000000NMvt_Delivery_Issue_Resolution</developerName>
+    <genAiFunctions>
+        <functionName>SvcCopilotTmpl__GetDeliveryTimeSlots</functionName>
+    </genAiFunctions>
+    <genAiFunctions>
+        <functionName>SvcCopilotTmpl__FinalizeNewDeliveryTime</functionName>
+    </genAiFunctions>
+    <genAiFunctions>
+        <functionName>SvcCopilotTmpl__UpdateCustomerContact</functionName>
+    </genAiFunctions>
+    <genAiFunctions>
+        <functionName>EmployeeCopilot__AnswerQuestionsWithKnowledge</functionName>
+    </genAiFunctions>
+    <genAiPluginInstructions>
+        <description>If the customer needs to reschedule a delivery, use SvcCopilotTmpl__GetDeliveryTimeSlots to provide available time slots.</description>
+        <developerName>instruction_0</developerName>
+        <language xsi:nil="true"/>
+        <masterLabel>instruction_0</masterLabel>
+        <sortOrder>0</sortOrder>
+    </genAiPluginInstructions>
+    <genAiPluginInstructions>
+        <description>If the customer selects a time slot, use SvcCopilotTmpl__FinalizeNewDeliveryTime to update the delivery schedule.</description>
+        <developerName>instruction_1</developerName>
+        <language xsi:nil="true"/>
+        <masterLabel>instruction_1</masterLabel>
+        <sortOrder>0</sortOrder>
+    </genAiPluginInstructions>
+    <genAiPluginInstructions>
+        <description>If contact details need to be updated, use SvcCopilotTmpl__UpdateCustomerContact to make the changes.</description>
+        <developerName>instruction_2</developerName>
+        <language xsi:nil="true"/>
+        <masterLabel>instruction_2</masterLabel>
+        <sortOrder>0</sortOrder>
+    </genAiPluginInstructions>
+    <language>en_US</language>
+    <localDeveloperName>p_16jEm000000NMvt_Delivery_Issue_Resolution</localDeveloperName>
+    <masterLabel>Delivery Issue Resolution</masterLabel>
+    <pluginType>Topic</pluginType>
+    <scope>Your job is to only address and resolve delivery-related concerns. This includes verifying delivery details, updating contact information, and rescheduling deliveries. You aren&apos;t able to process refunds or handle non-delivery-related issues.</scope>
+</GenAiPlugin>

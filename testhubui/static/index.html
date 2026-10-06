@@ -1,0 +1,2534 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>TestHub Automation Studio</title>
+<style>
+/* ── Design system: ported 1:1 from the Automation Studio mock ── */
+*{box-sizing:border-box}
+body{--canvas:#0A0E14;--panel:#0F141C;--panel-dim:#0B0F16;--chrome:#0D1219;--chrome-hi:#11161F;--raised:#131A24;--select-bg:#18212E;--disabled-bg:#1A222E;
+  --text-hi:#F2F5FA;--text:#E9EEF5;--text-2:#D6DEEA;--text-3:#C4CDDA;--text-4:#B7C0CE;--label:#AEB9C9;--text-sec:#9AA6B8;--muted:#8A94A6;--muted-2:#7C8698;--faint:#4C5766;
+  --border-faint:rgba(255,255,255,.06);--border:rgba(255,255,255,.08);--border-2:rgba(255,255,255,.09);--border-3:rgba(255,255,255,.13);
+  --fill-1:rgba(255,255,255,.05);--fill-2:rgba(255,255,255,.08);
+  --accent:#FF6A1A;--accent-text:#FF8A45;--accent-text-2:#FF9A52;--on-accent:#0A0E14;
+  --success:#2EAD6E;--success-text:#4FD98C;--warn:#E2B15A;--warn-text:#E7C06B;--danger:#F0483E;--input-bg:#0A0E14;
+  margin:0;background:var(--canvas);color:var(--text);font-family:'IBM Plex Sans',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+::selection{background:rgba(255,106,26,.32)}
+.mono{font-family:'IBM Plex Mono',ui-monospace,monospace}
+.scroll::-webkit-scrollbar{width:10px;height:10px}
+.scroll::-webkit-scrollbar-thumb{background:var(--fill-2);border-radius:8px;border:2px solid transparent;background-clip:padding-box}
+.scroll::-webkit-scrollbar-track{background:transparent}
+input,select,textarea{background:var(--input-bg);border:1px solid var(--border-2);border-radius:8px;padding:10px 12px;color:var(--text);font-family:inherit;font-size:14px;outline:none;width:100%}
+input:focus,select:focus,textarea:focus{border-color:rgba(255,106,26,.7);box-shadow:0 0 0 3px rgba(255,106,26,.14)}
+input::placeholder,textarea::placeholder{color:var(--faint)}
+label>span.lbl{display:block;font-size:12.5px;font-weight:600;color:var(--label);margin-bottom:7px}
+.req{color:var(--accent)}
+section.card{background:var(--panel);border:1px solid var(--border);border-radius:16px;padding:16px 18px;margin-bottom:12px}
+.card-title{font-size:15px;font-weight:700;color:var(--text-hi);margin-bottom:13px;display:flex;align-items:center;gap:9px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px 14px}
+.hint{font-size:11.5px;color:var(--muted);margin-top:7px}
+button{font-family:inherit;cursor:pointer}
+.btn{display:inline-flex;align-items:center;gap:7px;border-radius:8px;font-size:13px;font-weight:600;padding:9px 15px;border:1px solid var(--border-3);background:transparent;color:var(--text-3)}
+.btn:hover{border-color:rgba(255,255,255,.22);background:var(--fill-1)}
+.btn.primary{background:linear-gradient(180deg,#FF7A24,#F5540F);border:none;color:var(--on-accent);font-weight:700;box-shadow:0 1px 4px rgba(255,106,26,.28)}
+.btn.primary:disabled{background:var(--disabled-bg);color:var(--faint);cursor:not-allowed;box-shadow:none}
+.chip{font-size:10.5px;font-weight:700;letter-spacing:.05em;border-radius:6px;padding:3px 8px}
+.rail-btn{display:flex;align-items:center;gap:11px;width:100%;min-height:48px;padding:10px 11px;margin-bottom:6px;border-radius:12px;background:var(--panel);border:1px solid var(--border);text-align:left}
+.rail-btn.active{background:rgba(255,106,26,.10);border-color:rgba(255,106,26,.5)}
+.rail-icon{flex:none;width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;background:var(--fill-1);border:1px solid var(--border-faint)}
+.rail-btn.active .rail-icon{background:rgba(255,106,26,.14);border-color:rgba(255,106,26,.3)}
+.scn-card{display:flex;align-items:flex-start;gap:12px;cursor:pointer;text-align:left;border-radius:12px;padding:15px 16px;background:var(--canvas);border:1.5px solid rgba(255,255,255,.09)}
+.scn-card.on{background:rgba(46,173,110,.06);border-color:rgba(46,173,110,.4)}
+.scn-box{flex:none;width:22px;height:22px;border-radius:6px;display:flex;align-items:center;justify-content:center;border:1.5px solid var(--border-3)}
+.scn-card.on .scn-box{background:var(--success);border-color:var(--success)}
+.tab{background:transparent;border:none;border-bottom:2px solid transparent;color:var(--muted-2);font-size:12.5px;font-weight:500;padding:12px 10px;white-space:nowrap}
+.tab.on{border-bottom-color:var(--accent);color:var(--text-hi);font-weight:700}
+.file-chip{font-family:'IBM Plex Mono',monospace;font-size:11.5px;font-weight:600;padding:6px 11px;border-radius:8px;background:var(--fill-1);border:1px solid var(--border);color:var(--text-sec);white-space:nowrap}
+.file-chip.on{background:rgba(255,106,26,.14);border-color:rgba(255,106,26,.45);color:var(--accent-text)}
+.codebox{background:#080B10;border:1px solid rgba(255,255,255,.08);border-radius:12px;overflow:auto;max-height:430px;padding:12px 14px;font-family:'IBM Plex Mono',monospace;font-size:12px;line-height:1.7;color:#C9D3E0;white-space:pre}
+.hdr-row{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.3fr) 36px;border-bottom:1px solid var(--border-faint)}
+.hdr-row input{background:transparent;border:none;border-radius:0;padding:10px 13px;font-family:'IBM Plex Mono',monospace;font-size:13px}
+.hdr-row input:focus{box-shadow:none;border:none}
+.check-row{display:flex;align-items:center;gap:9px;margin-bottom:8px}
+.check-dot{flex:none;width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:var(--fill-1);border:1px solid var(--border-3);color:var(--muted);font-size:11px;font-weight:800}
+.check-dot.ok{background:var(--success);border-color:var(--success);color:var(--on-accent)}
+/* max-width + wrapping: without them a long message (e.g. the overwrite
+   refusal, which names files) stretches the toast past both edges of the
+   viewport and is unreadable. */
+#toast{max-width:min(560px,calc(100vw - 48px));white-space:normal;overflow-wrap:anywhere;line-height:1.45;text-align:center;position:fixed;left:50%;bottom:26px;transform:translateX(-50%) translateY(80px);background:var(--raised);border:1px solid rgba(255,106,26,.45);color:var(--text);font-size:13px;font-weight:600;border-radius:10px;padding:11px 18px;transition:transform .25s;z-index:99;box-shadow:0 8px 30px rgba(0,0,0,.5)}
+#toast.show{transform:translateX(-50%) translateY(0)}
+.summary-card{background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:10px 12px}
+.summary-k{font-size:10.5px;font-weight:600;letter-spacing:.06em;color:var(--muted);text-transform:uppercase;margin-bottom:6px}
+.file-row{display:flex;align-items:center;gap:13px;padding:13px 14px;background:var(--panel);border:1px solid var(--border);border-radius:12px}
+/* Collapse/expand pattern */
+.card-title .sec-toggle{margin-left:auto;flex:none;width:30px;height:30px;border-radius:9px;display:flex;align-items:center;justify-content:center;background:var(--fill-1);border:1px solid var(--border-2);color:var(--muted);transition:transform .18s}
+.card-title .sec-toggle svg{transition:transform .18s}
+section.card.collapsed .sec-body{display:none}
+section.card.collapsed{padding-bottom:16px}
+section.card.collapsed .sec-toggle svg{transform:rotate(-90deg)}
+section.card .card-title{cursor:pointer;user-select:none;margin-bottom:13px}
+section.card.collapsed .card-title{margin-bottom:0}
+/* Paths modal */
+/* Ortoni report viewer. Shown INLINE rather than via window.open(), because the
+   run-finished handler fires from an EventSource callback — not a user gesture —
+   so every popup blocker blocks it. The old code even had a fallback line for
+   that case, which meant the "opens automatically" promise quietly became
+   "here is a link to click". An iframe on our own origin cannot be blocked. */
+#report-overlay{position:fixed;inset:0;background:rgba(4,6,10,.72);backdrop-filter:blur(2px);display:none;align-items:center;justify-content:center;z-index:90}
+#report-overlay.open{display:flex}
+#report-modal{width:94vw;height:92vh;display:flex;flex-direction:column;background:var(--panel);border:1px solid var(--border-3);border-radius:16px;box-shadow:0 24px 80px rgba(0,0,0,.6);overflow:hidden}
+#report-modal iframe{flex:1;width:100%;border:0;background:#fff}
+#paths-overlay{position:fixed;inset:0;background:rgba(4,6,10,.66);backdrop-filter:blur(2px);display:none;align-items:center;justify-content:center;z-index:80}
+#paths-overlay.open{display:flex}
+#paths-modal{width:440px;max-width:92vw;background:var(--panel);border:1px solid var(--border-3);border-radius:16px;box-shadow:0 24px 80px rgba(0,0,0,.6)}
+#paths-modal .pm-head{display:flex;align-items:center;padding:15px 18px;border-bottom:1px solid var(--border)}
+#paths-modal label{display:block;margin-bottom:14px}
+#paths-modal input{font-family:'IBM Plex Mono',monospace;font-size:12.5px}
+/* Sized to its content, with a floor. This was a fixed 40x40 box with
+   justify-content:center and no overflow rule, which is right for the file
+   tags it was built for (TS, XLS, YML, '{ }' — all <=3 chars) and wrong for
+   the scenario kinds that were added later: 'positive', 'negative' and
+   'threshold' are 8-9 monospace characters, so the text spilled out of the
+   box on BOTH sides and collided with the scenario title next to it.
+   min-width keeps the short tags square; the rest now hug their text. */
+.badge{min-width:40px;height:40px;padding:0 9px;border-radius:12px;display:flex;align-items:center;justify-content:center;flex:none;font-family:'IBM Plex Mono',monospace;font-size:12px;font-weight:700;white-space:nowrap;box-sizing:border-box}
+</style>
+</head>
+<body>
+<div style="width:100%;height:100vh;min-width:1180px;display:flex;flex-direction:column;overflow:hidden">
+
+  <!-- ═══════ HEADER ═══════ -->
+  <header style="flex:none;height:60px;display:flex;align-items:center;gap:16px;padding:0 20px;background:linear-gradient(180deg,var(--chrome-hi),var(--chrome));border-bottom:1px solid var(--border)">
+    <div style="display:flex;align-items:center;gap:10px;flex:none">
+      <svg width="34" height="34" viewBox="0 0 100 100"><rect x="17.1" y="17.6" width="57.2" height="10.4" rx="2.6" fill="var(--accent)"/><rect x="32" y="17.6" width="10.4" height="72.8" rx="2.6" fill="var(--accent)"/><rect x="61.9" y="35.8" width="10.8" height="54.6" rx="2.6" fill="#F0483E"/><rect x="41.7" y="52" width="44.2" height="10.8" rx="2.6" fill="#F0483E"/></svg>
+      <div style="font-weight:700;font-size:20px;letter-spacing:-.015em;display:flex;align-items:baseline;gap:8px;white-space:nowrap">TestHub <span style="color:var(--accent-text)">Automation Studio</span>
+        <span class="chip mono" style="color:var(--muted);background:var(--fill-1);border:1px solid var(--border)">v1.1.0</span></div>
+    </div>
+    <div style="width:1px;height:34px;background:var(--fill-2)"></div>
+    <label style="display:flex;flex-direction:column;gap:3px;width:auto">
+      <span style="font-size:10.5px;font-weight:600;letter-spacing:.09em;color:var(--muted);text-transform:uppercase">Environment</span>
+      <select id="f-env" style="width:110px;padding:6px 10px;font-size:12.5px;font-weight:500;background:var(--raised)">
+        <option>MOCK</option><option selected>DEV</option><option>QA</option><option>SIT</option><option>UAT</option><option>PROD</option>
+      </select>
+    </label>
+    <div style="flex:1"></div>
+    <span id="ready-chip" class="chip" style="padding:8px 12px;font-size:12.5px"></span>
+    <button class="btn" id="save-draft">Save Draft</button>
+    <button class="btn" id="clear-draft" title="Clear every field and delete the saved draft">Clear Draft</button>
+    <button class="btn primary" id="btn-generate" disabled>Generate Test Assets</button>
+  </header>
+
+  <!-- ═══════ BODY ═══════ -->
+  <div style="flex:1;display:flex;min-height:0">
+
+    <!-- ── CAPABILITIES RAIL ── -->
+    <nav id="rail" class="scroll" style="flex:none;display:flex;flex-direction:column;width:312px;padding:12px 14px;border-right:1px solid var(--border);background:var(--panel-dim);overflow-y:auto">
+      <div style="font-size:10.5px;font-weight:700;letter-spacing:.13em;color:var(--muted);text-transform:uppercase;margin:0 2px 12px">Testing Capabilities</div>
+    </nav>
+
+    <!-- ── API MODULE ── -->
+    <div id="module-api" style="flex:1;display:flex;min-height:0">
+
+      <!-- form column -->
+      <div class="scroll" style="flex:1;min-width:0;overflow-y:auto;padding:16px 20px 40px">
+
+        <div style="display:flex;align-items:center;gap:13px;background:var(--panel);border:1px solid var(--border);border-radius:16px;padding:12px 16px;margin-bottom:12px">
+          <div style="width:38px;height:38px;border-radius:12px;display:flex;align-items:center;justify-content:center;background:rgba(255,106,26,.14);border:1px solid rgba(255,106,26,.3);flex:none">
+            <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="var(--accent-text)" stroke-width="2"><path d="M9 12l2 2 4-4"/><path d="M21 12c0 5-3.5 7.5-8.5 9C7.5 19.5 4 17 4 12V6l8-3 8 3v6Z"/></svg>
+          </div>
+          <div style="flex:1">
+            <div style="display:flex;align-items:center;gap:9px"><span style="font-size:15px;font-weight:700;color:var(--text-hi)">Functional API Test</span><span class="chip" style="color:var(--accent-text);background:rgba(255,106,26,.12);border:1px solid rgba(255,106,26,.3)">TEST TYPE</span></div>
+            <div style="font-size:12.5px;color:var(--text-sec);margin-top:3px">Describe the test once — the Studio generates governed, executable Playwright assets for the accelerator.</div>
+          </div>
+          <button class="btn" id="btn-paths" title="Configure output paths" style="flex:none">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+            Paths
+          </button>
+        </div>
+
+        <!-- Ortoni report viewer (inline; see #report-overlay in the stylesheet) -->
+        <div id="report-overlay">
+          <div id="report-modal">
+            <div class="pm-head" style="display:flex;align-items:center;gap:12px;padding:13px 16px;border-bottom:1px solid var(--border)">
+              <span style="font-size:14px;font-weight:700;color:var(--text-hi)">Ortoni Report</span>
+              <span id="report-name" class="mono" style="font-size:11px;color:var(--muted);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap"></span>
+              <a id="report-newtab" class="btn" target="_blank" rel="noopener" style="font-size:12px">Open in new tab ↗</a>
+              <button id="report-close" class="btn" style="width:32px;height:32px;padding:0;justify-content:center">✕</button>
+            </div>
+            <iframe id="report-frame" title="Ortoni test report"></iframe>
+          </div>
+        </div>
+
+        <!-- Paths modal (persistent output locations — reference-branch defaults) -->
+        <div id="paths-overlay">
+          <div id="paths-modal">
+            <div class="pm-head">
+              <span style="font-size:15px;font-weight:700;color:var(--text-hi)">Paths</span>
+              <span style="flex:1"></span>
+              <button id="paths-close" class="btn" style="width:32px;height:32px;padding:0;justify-content:center">✕</button>
+            </div>
+            <div style="padding:16px 18px 6px">
+              <div class="hint" style="margin:0 0 12px">Paths are repo-relative and persist in this browser until you change them. <span class="mono">&lt;asset&gt;</span> subfolders are added automatically where applicable.</div>
+              <div style="font-size:11px;font-weight:700;letter-spacing:.06em;color:var(--muted);margin:4px 0 8px">API QUALITY ACCELERATOR</div>
+              <label><span class="lbl">Request Payload</span><input id="p-request"></label>
+              <label><span class="lbl">Test Script</span><input id="p-spec"></label>
+              <label><span class="lbl">Test Data (Excel)</span><input id="p-excel"></label>
+              <label><span class="lbl">Response</span><input id="p-response"></label>
+              <label><span class="lbl">RAML</span><input id="p-raml"></label>
+              <div style="font-size:11px;font-weight:700;letter-spacing:.06em;color:var(--muted);margin:18px 0 8px">PERFORMANCE QUALITY ACCELERATOR</div>
+              <label><span class="lbl">Performance accelerator (k6)</span><input id="p-perfFramework"></label>
+              <div class="hint" style="margin:-4px 0 12px">Everything the Performance tab generates — the self-contained k6 script, its two workbooks, and the framework-shaped export — lands together under &lt;this&gt;/tests/&lt;Test Name or asset-service&gt;/. Performance gate specs still land in Test Script above, so the API accelerator's Ortoni report carries them. Other accelerator paths (UI, Mobile, Salesforce, Security, LLM Security, Agentforce, Contract) are hidden while only API and Performance ship — they keep their defaults and come back here once each is complete.</div>
+            </div>
+            <div style="display:flex;justify-content:center;padding:0 18px 16px">
+              <button class="btn primary" id="paths-save" style="min-width:160px;justify-content:center">Save Paths</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- API Details -->
+        <section class="card">
+          <div class="card-title">API Details<button class="sec-toggle" data-sec="api" title="Collapse / expand"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="m6 9 6 6 6-6"/></svg></button></div>
+          <div class="sec-body"><div class="grid2">
+            <label><span class="lbl">Asset Name <span class="req">*</span></span>
+              <input id="f-asset" placeholder="clients" class="mono"></label>
+            <label><span class="lbl">Service Name <span class="req">*</span></span>
+              <input id="f-svcname" placeholder="customer-service" class="mono"></label>
+            <label><span class="lbl">HTTP Method <span class="req">*</span></span>
+              <select id="f-method" class="mono" style="font-weight:600"><option selected>GET</option><option>POST</option><option>PUT</option><option>PATCH</option><option>DELETE</option></select></label>
+            <label><span class="lbl">API Endpoint <span class="req">*</span></span>
+              <input id="f-endpoint" placeholder="/clients" class="mono"></label>
+            <label><span class="lbl">Endpoint Type</span>
+              <select id="f-endpointtype" class="mono" title="Internal or external endpoint group. Resolves the base URL for the selected environment from config/env.yaml; the API Endpoint above is appended to it.">
+                <option value="">Default (baseUrl)</option>
+                <option value="internal">Internal</option>
+                <option value="external">External</option>
+              </select></label>
+          </div></div>
+        </section>
+
+        <!-- Authentication -->
+        <section class="card">
+          <div class="card-title"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="var(--muted)" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>Authentication<button class="sec-toggle" data-sec="auth" title="Collapse / expand"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="m6 9 6 6 6-6"/></svg></button></div>
+          <div class="sec-body"><label style="max-width:520px;display:block"><span class="lbl">Authentication Profile <span class="req">*</span></span>
+            <select id="f-auth">
+              <option value="">Default Secure Profile (.env credentials)</option>
+              <option value="oauth2">OAuth 2.0 Client Credentials</option>
+              <option value="mulesoft">MuleSoft OAuth 2.0</option>
+              <option value="salesforce">Salesforce Connected App</option>
+              <option value="apikey">API Key</option>
+              <option value="basic">Basic Authentication</option>
+              <option value="none">No Authentication</option>
+            </select></label>
+          <div style="display:flex;align-items:center;gap:8px;margin-top:12px">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--success)" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+            <span style="font-size:12px;color:var(--muted-2)">Profiles resolve from the framework's <span class="mono">.env</span> at run time. No passwords, tokens or keys are stored in generated assets.</span>
+          </div></div>
+        </section>
+
+        <!-- Request -->
+        <section class="card">
+          <div class="card-title">Payload<button class="sec-toggle" data-sec="payload" title="Collapse / expand"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="m6 9 6 6 6-6"/></svg></button></div>
+          <div class="sec-body">
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:11px">
+            <span style="font-size:12.5px;font-weight:600;color:var(--label)">Raml Code</span>
+            <span style="flex:1"></span>
+            <label style="display:flex;align-items:center;gap:7px;width:auto">
+              <span style="font-size:11px;font-weight:600;letter-spacing:.06em;color:var(--muted);text-transform:uppercase">Body Format</span>
+              <select id="f-bodyfmt" style="width:96px;padding:6px 10px;font-size:12.5px;font-weight:600;background:var(--raised)">
+                <option selected>JSON</option><option>XML</option><option>FORM</option><option>URLENCODED</option><option>BINARY</option><option value="MFT">MFT Zone</option>
+              </select>
+            </label>
+          </div>
+          <div style="margin-bottom:12px">
+            <textarea id="f-raml" spellcheck="false" placeholder="#%RAML 1.0 DataType&#10;type: object&#10;properties:&#10;  name:&#10;    type: string&#10;    required: true&#10;  job:&#10;    type: string&#10;    required: false" style="height:150px;font-family:'IBM Plex Mono',monospace;font-size:13px;resize:vertical"></textarea>
+            <div class="hint">Optional. When entered it is checked against the request payload, drives the Missing / Invalid expected status codes from each property's type and <span class="mono">required</span> flag, and is saved as evidence under <span class="mono" id="hint-raml-path">test-data/raml/&lt;asset&gt;/</span>. Left empty, everything behaves as before.</div>
+            <div id="f-raml-err" style="display:none;margin-top:8px;font-size:12px;color:var(--danger)"></div>
+          </div>
+          <div style="font-size:11px;font-weight:700;letter-spacing:.06em;color:var(--muted);text-transform:uppercase;margin-bottom:8px">Request Headers</div>
+          <div id="hdr-json-wrap" style="display:none;margin-bottom:10px">
+            <textarea id="hdr-json" spellcheck="false" style="height:110px;font-family:'IBM Plex Mono',monospace;font-size:13px;resize:vertical"></textarea>
+            <div id="hdr-json-err" style="display:none;margin-top:8px;font-size:12px;color:var(--danger)"></div>
+            <div class="hint">Edits here stay in sync with the table view.</div>
+          </div>
+          <div style="border:1px solid var(--border);border-radius:12px;overflow:hidden">
+            <div class="hdr-row" style="background:var(--raised);border-bottom:1px solid var(--border)">
+              <span style="font-size:10.5px;font-weight:700;letter-spacing:.08em;color:var(--muted);text-transform:uppercase;padding:9px 13px">Header</span>
+              <span style="font-size:10.5px;font-weight:700;letter-spacing:.08em;color:var(--muted);text-transform:uppercase;padding:9px 13px;border-left:1px solid var(--border-faint)">Value</span><span></span>
+            </div>
+            <div id="hdr-rows"></div>
+            <button id="btn-add-hdr" style="display:flex;align-items:center;gap:7px;width:100%;background:transparent;border:none;padding:10px 13px;color:var(--text-3);font-size:12.5px;font-weight:600;text-align:left">＋ Add Header</button>
+          </div>
+
+          <div style="display:flex;align-items:center;gap:10px;margin:20px 0 11px">
+            <span style="font-size:12.5px;font-weight:600;color:var(--label)">Request Payload</span>
+            <label id="get-body-toggle" style="display:none;align-items:center;gap:7px;width:auto;cursor:pointer">
+              <input type="checkbox" id="f-getbody" style="width:auto"> <span style="font-size:12px;color:var(--text-sec)">Include a request body with this <b class="mono" id="get-body-method">GET</b> <span style="color:var(--muted)">(unusual, supported by the engine)</span></span>
+            </label>
+          </div>
+          <div id="payload-wrap">
+            <textarea id="f-payload" spellcheck="false" placeholder='{ "id": "demo1", "name": "Morpheus" }' style="height:120px;font-family:'IBM Plex Mono',monospace;font-size:13px;resize:vertical"></textarea>
+            <div class="hint" id="payload-hint">Saved to <span class="mono" id="hint-request-path">test-data/request/json/&lt;asset&gt;/</span> and wired via <span class="mono">requestBodyFile</span>.</div>
+            <div id="xml-note" style="display:none;margin-top:8px;padding:9px 12px;background:rgba(226,177,90,.08);border:1px solid rgba(226,177,90,.3);border-radius:8px;font-size:12px;color:var(--warn-text)">XML mode: Content-Type is set to <span class="mono">application/xml</span> automatically. Per-field negative rows don't apply to XML payloads and are skipped by the matrix; the remaining classes (Accept, media-type, endpoint, methods, empty/malformed body) still generate.</div>
+
+            <!-- Form-data / urlencoded table — Postman-style key/value with per-row File|Text -->
+            <div id="form-table-wrap" style="display:none">
+              <div style="border:1px solid var(--border);border-radius:12px;overflow:hidden">
+                <div class="form-row" style="background:var(--raised);border-bottom:1px solid var(--border);display:grid;grid-template-columns:1fr 96px 1.4fr 34px;align-items:center">
+                  <span style="font-size:10.5px;font-weight:700;letter-spacing:.08em;color:var(--muted);text-transform:uppercase;padding:9px 13px">Key</span>
+                  <span style="font-size:10.5px;font-weight:700;letter-spacing:.08em;color:var(--muted);text-transform:uppercase;padding:9px 13px;border-left:1px solid var(--border-faint)">Type</span>
+                  <span style="font-size:10.5px;font-weight:700;letter-spacing:.08em;color:var(--muted);text-transform:uppercase;padding:9px 13px;border-left:1px solid var(--border-faint)">Value</span>
+                  <span></span>
+                </div>
+                <div id="form-rows"></div>
+                <button class="btn" id="form-add" style="width:100%;border:none;border-top:1px solid var(--border);border-radius:0;text-align:left;padding:10px 13px;font-size:12.5px;color:var(--muted)">+ Add Field</button>
+              </div>
+              <div class="hint" id="form-hint">Form fields map to excel columns; File rows attach an upload via <span class="mono">FilePath</span>. Mirrors Postman's form-data body.</div>
+            </div>
+
+            <!-- Binary picker -->
+            <div id="binary-wrap" style="display:none">
+              <label><span class="lbl">Binary File Path</span><input id="f-binary" value="test-data/files/sample.pdf" placeholder="test-data/files/sample.pdf" class="mono"></label>
+              <div class="hint">The file at this path is uploaded as the raw request body. Content-Type comes from the header above (e.g. <span class="mono">application/pdf</span>).</div>
+            </div>
+
+            <!-- MFT Zone (formerly ETL) — file-transfer / landing-zone step -->
+            <div id="mft-wrap" style="display:none">
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+                <label><span class="lbl">Website URL</span><input id="mft-url" placeholder="https://portal.example.com/dropbox" class="mono"></label>
+                <label><span class="lbl">Username</span><input id="mft-user" placeholder="svc_mft_user" class="mono"></label>
+                <label><span class="lbl">Password <span style="color:var(--muted);font-weight:400;text-transform:none;letter-spacing:0">· env-var reference</span></span><input id="mft-pass" placeholder="MFT_PASSWORD" class="mono"></label>
+                <label><span class="lbl">File Path</span><input id="mft-file" placeholder="test-data/files/payload.csv" class="mono"></label>
+              </div>
+              <div style="margin-top:9px;padding:9px 12px;background:rgba(46,173,110,.08);border:1px solid rgba(46,173,110,.3);border-radius:8px;font-size:12px;color:var(--success-text)">
+                🔒 Password is stored as an <b>environment-variable reference</b> (e.g. <span class="mono">MFT_PASSWORD</span>), resolved from <span class="mono">.env</span> at run time. The secret is never written into generated assets.
+              </div>
+              <div class="hint" id="mft-hint">MFT Zone is the ETL on-ramp: the test authenticates to the portal and drops the file into the landing zone the pipeline picks up from. <b>GET-only.</b></div>
+            </div>
+          </div>
+          <div id="no-payload" style="display:none;align-items:center;gap:10px;padding:16px;background:var(--canvas);border:1px dashed var(--border-3);border-radius:12px">
+            <span style="font-size:13px;color:var(--muted)">No request payload for the <b class="mono" id="no-payload-method" style="color:var(--text-3)">GET</b> method — tick the option above to add one.</span>
+          </div></div>
+        </section>
+
+        <!-- Expectations -->
+        <section class="card">
+          <div class="card-title">Expectations<button class="sec-toggle" data-sec="expect" title="Collapse / expand"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="m6 9 6 6 6-6"/></svg></button></div>
+          <div class="sec-body">
+          <div class="grid2" style="max-width:560px">
+            <label><span class="lbl">Expected HTTP Status <span class="req">*</span> <span style="font-weight:400;color:var(--muted)">· happy path</span></span>
+              <input id="f-status" class="mono" value="200" style="font-weight:600"></label>
+            <label><span class="lbl">Max Response ms <span style="font-weight:400;color:var(--muted)">· optional</span></span>
+              <input id="f-maxms" class="mono" placeholder="3000"></label>
+          </div>
+          <label style="display:block;margin-top:14px"><span class="lbl">Expected Response JSON <span style="font-weight:400;color:var(--muted)"><b></b></span></span>
+            <textarea id="f-expected" spellcheck="false" placeholder="Paste the captured response payload — leave empty if none has been captured yet" style="height:110px;font-family:'IBM Plex Mono',monospace;font-size:13px;resize:vertical"></textarea></label></div>
+        </section>
+
+        <!-- Scenario Type -->
+        <section class="card">
+          <div class="card-title">Scenario Type <span style="font-size:12px;color:var(--muted);font-weight:400">Select one or both</span><button class="sec-toggle" data-sec="scenario" title="Collapse / expand"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="m6 9 6 6 6-6"/></svg></button></div>
+          <div class="sec-body">
+          <div class="grid2">
+            <button class="scn-card on" id="scn-pos">
+              <span class="scn-box"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--on-accent)" stroke-width="3.4"><path d="M20 6 9 17l-5-5"/></svg></span>
+              <span><span style="display:block;font-size:14px;font-weight:700;color:var(--text-hi)">Positive</span><span style="display:block;font-size:12px;color:var(--text-sec);margin-top:3px">Valid request asserting the expected successful outcome</span></span>
+            </button>
+            <button class="scn-card" id="scn-neg">
+              <span class="scn-box"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--on-accent)" stroke-width="3.4" style="display:none"><path d="M20 6 9 17l-5-5"/></svg></span>
+              <span><span style="display:block;font-size:14px;font-weight:700;color:var(--text-hi)">Negative <span class="chip" style="color:var(--accent-text);background:rgba(255,106,26,.12);border:1px solid rgba(255,106,26,.3);margin-left:6px">GOVERNED MATRIX</span></span><span style="display:block;font-size:12px;color:var(--text-sec);margin-top:3px">Negative-scenario matrix: payload, per-field, media-type, endpoint and method classes</span></span>
+            </button>
+          </div>
+          </div></div>
+        </section>
+      </div>
+
+      <!-- preview column
+           NB: a pre-existing <div> imbalance above means this column is a SIBLING of
+           #module-api, not a child of it. Hiding #module-api alone therefore leaves
+           this column on screen. It carries its own id so the rail can toggle it
+           explicitly — see renderRail(). -->
+      <div id="module-api-preview" style="flex:0 1 560px;min-width:380px;max-width:640px;border-left:1px solid var(--border);background:var(--panel-dim);display:flex;flex-direction:column;min-height:0;overflow:hidden">
+        <div style="flex:none;display:flex;align-items:center;gap:10px;padding:10px 16px;border-bottom:1px solid var(--border-faint);background:var(--chrome)">
+          <span id="pv-name" style="font-size:14px;font-weight:700;color:var(--text-hi);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">clients</span>
+          <span id="pv-pill" class="chip" style="display:none;color:var(--muted);background:var(--fill-1);border:1px solid var(--border-3)"></span>
+          <span style="flex:1"></span>
+          <span id="pv-meta" style="font-size:11px;color:var(--muted);white-space:nowrap">Not generated yet</span>
+        </div>
+        <div style="flex:none;display:flex;padding:0 8px;border-bottom:1px solid var(--border);background:var(--chrome)">
+          <button class="tab on" data-tab="summary">Summary</button>
+          <button class="tab" data-tab="files">Generated Assets</button>
+          <button class="tab" data-tab="results">View Results</button>
+        </div>
+        <div class="scroll" style="flex:1;overflow-y:auto;padding:16px 18px">
+
+          <div id="tab-summary">
+            <div id="ready-banner"></div>
+            <div style="display:flex;align-items:baseline;gap:8px;margin-bottom:4px"><span style="font-size:15px;font-weight:700;color:var(--text-hi)">Derived Scenarios</span><span id="scn-count" class="chip mono" style="background:var(--fill-2);color:var(--text-sec)">0</span></div>
+            <div style="font-size:12.5px;color:var(--muted);margin-bottom:14px">Every row below becomes one test in the Ortoni report — displayed before you run, never a black box.</div>
+            <div id="scn-rows" style="display:flex;flex-direction:column;gap:7px"></div>
+            <div style="display:flex;align-items:baseline;gap:8px;margin:22px 0 4px"><span style="font-size:12px;font-weight:700;letter-spacing:.12em;color:var(--muted);text-transform:uppercase">Generated Assets</span><span style="font-size:12px;color:var(--muted-2)">(preview)</span></div>
+            <div id="asset-list" style="display:flex;flex-direction:column;gap:10px"></div>
+            <div style="display:flex;gap:9px;margin-top:14px;padding:12px 14px;background:rgba(255,106,26,.06);border:1px solid rgba(255,106,26,.18);border-radius:12px">
+              <span style="font-size:12px;line-height:1.5;color:var(--text-4)"><b style="color:var(--accent-text)">TestHub Automation Studio</b> places every file in its governed framework location — unzip at the accelerator root and folders map 1:1.</span>
+            </div>
+          </div>
+
+          <!-- Generated Assets: the live Test Runner (Framework Monitor through
+               Execute Tests). initRunner() below replaces #tab-files's contents
+               wholesale and nothing else targets it. -->
+          <div id="tab-files" style="display:none"></div>
+
+          <!-- View Results: the last run's own report, inline. Populated only
+               from the report path the runner reports for THIS run — never a
+               stale report lying around (see EVID-1 in app.py). -->
+          <div id="tab-results" style="display:none">
+            <div id="results-empty" style="display:flex;align-items:center;gap:12px;padding:18px;background:var(--canvas);border:1px dashed var(--border-3);border-radius:12px">
+              <span style="font-size:12.5px;color:var(--muted)">No results yet. Run a suite from the runner in <b style="color:var(--accent-text-2)">Generated Assets</b>, and its report appears here when it finishes.</span>
+            </div>
+            <div id="results-view" style="display:none;flex-direction:column;height:calc(100vh - 240px);min-height:520px;gap:10px">
+              <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+                <span id="results-verdict" class="chip mono" style="font-weight:700"></span>
+                <span id="results-summary" style="font-size:12.5px;color:var(--text-sec)"></span>
+                <span style="flex:1"></span>
+                <span id="results-name" class="mono" style="font-size:11px;color:var(--muted);max-width:40%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap"></span>
+                <a id="results-fullscreen" class="btn" style="font-size:12px" title="Open the report full screen">Full screen ↗</a>
+              </div>
+              <iframe id="results-frame" title="Last run report" style="flex:1;width:100%;border:1px solid var(--border-3);border-radius:12px;background:#fff"></iframe>
+            </div>
+          </div>
+        </div>
+
+        <div style="flex:none;display:flex;align-items:center;gap:13px;padding:10px 22px;border-top:1px solid var(--border);background:var(--chrome)">
+          <svg width="30" height="30" viewBox="0 0 100 100"><rect x="17.1" y="17.6" width="57.2" height="10.4" rx="2.6" fill="var(--accent)"/><rect x="32" y="17.6" width="10.4" height="72.8" rx="2.6" fill="var(--accent)"/><rect x="61.9" y="35.8" width="10.8" height="54.6" rx="2.6" fill="#F0483E"/><rect x="41.7" y="52" width="44.2" height="10.8" rx="2.6" fill="#F0483E"/></svg>
+          <span style="font-size:18px;font-weight:700;letter-spacing:-.015em;color:var(--text-hi)">TestHub</span>
+          <span style="width:1px;height:24px;background:var(--border-3)"></span>
+          <span style="font-size:14.5px;font-weight:500;font-style:italic;color:var(--danger)">Technology That Earns Trust</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- UI Test Automation engine -->
+    <div id="module-ui" style="flex:1;display:none;min-height:0">
+      <div class="scroll" style="flex:1;overflow-y:auto;padding:18px 22px;min-width:0">
+
+        <section class="card">
+          <div class="card-title">Journey Details</div>
+          <div class="sec-body">
+            <div class="grid2">
+              <label><span class="lbl">Asset Name <span class="req">*</span></span>
+                <input id="u-asset" class="mono" placeholder="portal"></label>
+              <label><span class="lbl">Service Name <span class="req">*</span></span>
+                <input id="u-svc" class="mono" placeholder="login"></label>
+            </div>
+            <div class="grid2" style="margin-top:12px">
+              <label><span class="lbl">Journey Name</span>
+                <input id="u-journey" placeholder="Login"></label>
+              <label><span class="lbl">Base URL <span class="req">*</span></span>
+                <input id="u-baseurl" class="mono" placeholder="https://your-app.example/login"></label>
+            </div>
+            <div class="hint" style="margin-top:9px">Base URL is emitted as
+              <span class="mono">process.env.UI_BASE_URL || '&lt;value&gt;'</span>, so the same suite
+              points at another environment without regenerating.</div>
+          </div>
+        </section>
+
+        <section class="card">
+          <div class="card-title">Steps <span style="font-size:12px;color:var(--muted);font-weight:400">Each row is one keyword call</span></div>
+          <div class="sec-body">
+            <div id="u-steps" style="display:flex;flex-direction:column;gap:7px"></div>
+            <button class="btn" id="u-add-step" style="margin-top:10px;font-size:12px;padding:7px 12px">+ Add step</button>
+            <div class="hint" style="margin-top:9px">Locators accept <span class="mono">#id</span>,
+              <span class="mono">.class</span>, <span class="mono">//xpath</span>,
+              <span class="mono">text=</span> and <span class="mono">role=</span>.</div>
+          </div>
+        </section>
+
+        <section class="card">
+          <div class="card-title">Expectations</div>
+          <div class="sec-body">
+            <label style="display:block"><span class="lbl">Success Locator <span class="req">*</span>
+              <span style="font-weight:400;color:var(--muted)">· visible on success, hidden on every negative</span></span>
+              <input id="u-success" class="mono" placeholder="#AppLauncher"></label>
+            <div class="grid2" style="margin-top:12px">
+              <label><span class="lbl">Expected Title <span style="font-weight:400;color:var(--muted)">· optional</span></span>
+                <input id="u-title" placeholder="Home"></label>
+              <label><span class="lbl">URL Contains <span style="font-weight:400;color:var(--muted)">· optional</span></span>
+                <input id="u-url" class="mono" placeholder="/home"></label>
+            </div>
+          </div>
+        </section>
+
+        <section class="card">
+          <div class="card-title">Scenario Type</div>
+          <div class="sec-body">
+            <div class="grid2">
+              <button class="scn-card on" id="u-pos"><span class="scn-box"></span>
+                <span style="flex:1;min-width:0"><span style="display:block;font-size:13px;font-weight:700">Positive</span>
+                <span style="display:block;font-size:11.5px;color:var(--muted);margin-top:2px">The happy journey</span></span></button>
+              <button class="scn-card on" id="u-neg"><span class="scn-box"></span>
+                <span style="flex:1;min-width:0"><span style="display:block;font-size:13px;font-weight:700">Negative</span>
+                <span style="display:block;font-size:11.5px;color:var(--muted);margin-top:2px">Empty + invalid, per filled field</span></span></button>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <div style="flex:0 1 560px;min-width:380px;max-width:640px;border-left:1px solid var(--border);background:var(--panel-dim);display:flex;flex-direction:column;min-height:0;overflow:hidden">
+        <div style="flex:none;display:flex;align-items:center;gap:10px;padding:10px 16px;border-bottom:1px solid var(--border-faint);background:var(--chrome)">
+          <span style="font-size:14px;font-weight:700;color:var(--text-hi)">UI Test Automation</span>
+          <span class="chip" style="color:var(--success-text);background:rgba(46,173,110,.12);border:1px solid rgba(46,173,110,.3)">LIVE</span>
+          <span style="flex:1"></span>
+          <span id="u-meta" style="font-size:11px;color:var(--muted)">Not generated yet</span>
+        </div>
+        <div class="scroll" style="flex:1;overflow-y:auto;padding:16px 18px">
+          <div style="display:flex;align-items:baseline;gap:8px;margin-bottom:4px">
+            <span style="font-size:15px;font-weight:700;color:var(--text-hi)">Derived Scenarios</span>
+            <span id="u-count" class="chip mono" style="background:var(--fill-2);color:var(--text-sec)">0</span></div>
+          <div style="font-size:12.5px;color:var(--muted);margin-bottom:14px">Derived from your steps — one row per test. Nothing is invented.</div>
+          <div id="u-rows" style="display:flex;flex-direction:column;gap:7px"></div>
+          <div style="display:flex;gap:9px;margin-top:16px;padding:12px 14px;background:rgba(255,106,26,.06);border:1px solid rgba(255,106,26,.18);border-radius:12px">
+            <span style="font-size:12px;line-height:1.5;color:var(--text-4)">Generated specs call the
+              <b style="color:var(--accent-text)">TestHub keyword layer</b> only
+              (<span class="mono">browserActions</span> · <span class="mono">elementActions</span>) — never raw
+              Playwright — so the execution engine can be swapped without regenerating a single test.</span>
+          </div>
+        </div>
+        <div style="flex:none;display:flex;align-items:center;gap:13px;padding:10px 22px;border-top:1px solid var(--border);background:var(--chrome)">
+          <span id="u-ready" class="chip" style="padding:8px 12px;font-size:12.5px"></span>
+          <span style="flex:1"></span>
+          <button class="btn primary" id="u-generate" disabled>Generate UI Assets</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Salesforce Test Automation engine -->
+    <div id="module-sf" style="flex:1;display:none;min-height:0">
+      <div class="scroll" style="flex:1;overflow-y:auto;padding:18px 22px;min-width:0">
+
+        <section class="card">
+          <div class="card-title">Target Object</div>
+          <div class="sec-body">
+            <div class="grid2">
+              <label><span class="lbl">Salesforce Object <span class="req">*</span></span>
+                <select id="s-object">
+                  <option value="Contact">Contact — create &amp; verify</option>
+                  <option value="Account">Account — verify existing record</option>
+                </select></label>
+              <label><span class="lbl">Persona <span style="font-weight:400;color:var(--muted)">· role from credentials.yaml</span></span>
+                <input id="s-persona" class="mono" placeholder="admin"></label>
+            </div>
+            <div class="grid2" style="margin-top:12px">
+              <label><span class="lbl">Asset Name <span class="req">*</span> <span style="font-weight:400;color:var(--muted)">· file slug</span></span>
+                <input id="s-asset" class="mono" placeholder="studioContact"></label>
+              <label><span class="lbl">Test Case Prefix</span>
+                <input id="s-prefix" class="mono" placeholder="TC_SF_Contact"></label>
+            </div>
+            <label style="display:block;margin-top:12px"><span class="lbl">Suite Name</span>
+              <input id="s-suite" placeholder="Salesforce Contact"></label>
+            <div id="s-flow-note" class="hint" style="margin-top:9px"></div>
+          </div>
+        </section>
+
+        <section class="card">
+          <div class="card-title">Field Data <span style="font-size:12px;color:var(--muted);font-weight:400">Only fields the page object can fill</span></div>
+          <div class="sec-body">
+            <div id="s-fields" style="display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:8px"></div>
+            <div class="hint" style="margin-top:9px">Written to
+              <span class="mono">src/testdata/yaml/sf-&lt;asset&gt;.yaml</span>, keyed by the exact test
+              title. Secrets never appear here — credentials resolve from env.</div>
+          </div>
+        </section>
+
+        <section class="card">
+          <div class="card-title">Scenario Type</div>
+          <div class="sec-body">
+            <div class="grid2">
+              <button class="scn-card on" id="s-pos"><span class="scn-box"></span>
+                <span style="flex:1;min-width:0"><span style="display:block;font-size:13px;font-weight:700">Positive</span>
+                <span style="display:block;font-size:11.5px;color:var(--muted);margin-top:2px">Create/verify + field comparison</span></span></button>
+              <button class="scn-card on" id="s-neg"><span class="scn-box"></span>
+                <span style="flex:1;min-width:0"><span style="display:block;font-size:13px;font-weight:700">Negative</span>
+                <span style="display:block;font-size:11.5px;color:var(--muted);margin-top:2px">Required field omitted</span></span></button>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <div style="flex:0 1 560px;min-width:380px;max-width:640px;border-left:1px solid var(--border);background:var(--panel-dim);display:flex;flex-direction:column;min-height:0;overflow:hidden">
+        <div style="flex:none;display:flex;align-items:center;gap:10px;padding:10px 16px;border-bottom:1px solid var(--border-faint);background:var(--chrome)">
+          <span style="font-size:14px;font-weight:700;color:var(--text-hi)">Salesforce Test Automation</span>
+          <span class="chip" style="color:var(--warn-text);background:rgba(226,177,90,.12);border:1px solid rgba(226,177,90,.32)">ASSETS ONLY</span>
+          <span style="flex:1"></span>
+          <span id="s-meta" style="font-size:11px;color:var(--muted)">Not generated yet</span>
+        </div>
+        <div class="scroll" style="flex:1;overflow-y:auto;padding:16px 18px">
+          <div style="display:flex;align-items:baseline;gap:8px;margin-bottom:4px">
+            <span style="font-size:15px;font-weight:700;color:var(--text-hi)">Derived Scenarios</span>
+            <span id="s-count" class="chip mono" style="background:var(--fill-2);color:var(--text-sec)">0</span></div>
+          <div style="font-size:12.5px;color:var(--muted);margin-bottom:14px">Emitted in the Salesforce accelerator's own shape — fixtures, page objects, YAML by test title.</div>
+          <div id="s-rows" style="display:flex;flex-direction:column;gap:7px"></div>
+          <div style="display:flex;gap:9px;margin-top:16px;padding:12px 14px;background:rgba(226,177,90,.06);border:1px solid rgba(226,177,90,.2);border-radius:12px">
+            <span style="font-size:12px;line-height:1.5;color:var(--text-4)"><b style="color:var(--warn-text)">Assets only.</b>
+              Execution needs a sandbox org and
+              <span class="mono">testhub-salesforce-automation-accelerator</span> checked out — the Studio
+              generates the spec and its YAML, it does not run them.</span>
+          </div>
+        </div>
+        <div style="flex:none;display:flex;align-items:center;gap:13px;padding:10px 22px;border-top:1px solid var(--border);background:var(--chrome)">
+          <span id="s-ready" class="chip" style="padding:8px 12px;font-size:12.5px"></span>
+          <span style="flex:1"></span>
+          <button class="btn primary" id="s-generate" disabled>Generate Salesforce Assets</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Generic schema-driven engine panel (Mobile, Performance, Security, Agentforce, AI) -->
+    <div id="module-generic" style="flex:1;display:none;min-height:0">
+      <div class="scroll" id="g-form" style="flex:1;overflow-y:auto;padding:18px 22px;min-width:0"></div>
+      <div style="flex:0 1 560px;min-width:380px;max-width:640px;border-left:1px solid var(--border);background:var(--panel-dim);display:flex;flex-direction:column;min-height:0;overflow:hidden">
+        <div style="flex:none;display:flex;align-items:center;gap:10px;padding:10px 16px;border-bottom:1px solid var(--border-faint);background:var(--chrome)">
+          <span id="g-title" style="font-size:14px;font-weight:700;color:var(--text-hi)"></span>
+          <span id="g-badge" class="chip"></span>
+          <span style="flex:1"></span>
+          <span id="g-meta" style="font-size:11px;color:var(--muted)">Not generated yet</span>
+        </div>
+        <div style="flex:none;display:flex;padding:0 8px;border-bottom:1px solid var(--border);background:var(--chrome)">
+          <button class="tab on" data-tab="g-summary">Summary</button>
+          <button class="tab" data-tab="g-files">Generated Assets</button>
+          <button class="tab" data-tab="g-results">View Results</button>
+        </div>
+        <div class="scroll" style="flex:1;overflow-y:auto;padding:16px 18px">
+
+          <div id="tab-g-summary">
+            <div style="display:flex;align-items:baseline;gap:8px;margin-bottom:4px">
+              <span style="font-size:15px;font-weight:700;color:var(--text-hi)">Derived Scenarios</span>
+              <span id="g-count" class="chip mono" style="background:var(--fill-2);color:var(--text-sec)">0</span></div>
+            <div style="font-size:12.5px;color:var(--muted);margin-bottom:14px">Derived by the engine itself — this list is what will be generated.</div>
+            <div id="g-rows" style="display:flex;flex-direction:column;gap:7px"></div>
+            <div id="g-reason" style="display:flex;gap:9px;margin-top:16px;padding:12px 14px;border-radius:12px;font-size:12px;line-height:1.5"></div>
+          </div>
+
+          <!-- Generated Assets: a Framework Monitor + live runner, same shape as
+               the API module's (#tab-files / initRunner()), scoped to whichever
+               engine is mounted. #tab-g-files keeps its id — initGenericRunner()
+               below replaces its contents wholesale and nothing else targets it. -->
+          <div id="tab-g-files" style="display:none"></div>
+
+          <!-- View Results: the last run's own report, inline. Populated only
+               from the report path the runner reports for THIS run. -->
+          <div id="tab-g-results" style="display:none">
+            <div id="g-results-empty" style="display:flex;align-items:center;gap:12px;padding:18px;background:var(--canvas);border:1px dashed var(--border-3);border-radius:12px">
+              <span style="font-size:12.5px;color:var(--muted)">No results yet. Run a suite from the runner in <b style="color:var(--accent-text-2)">Generated Assets</b>, and its report appears here when it finishes.</span>
+            </div>
+            <div id="g-results-view" style="display:none;flex-direction:column;height:calc(100vh - 240px);min-height:520px;gap:10px">
+              <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+                <span id="g-results-verdict" class="chip mono" style="font-weight:700"></span>
+                <span id="g-results-summary" style="font-size:12.5px;color:var(--text-sec)"></span>
+                <span style="flex:1"></span>
+                <span id="g-results-name" class="mono" style="font-size:11px;color:var(--muted);max-width:40%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap"></span>
+                <a id="g-results-fullscreen" class="btn" style="font-size:12px" title="Open the report full screen">Full screen ↗</a>
+              </div>
+              <iframe id="g-results-frame" title="Last run report" style="flex:1;width:100%;border:1px solid var(--border-3);border-radius:12px;background:#fff"></iframe>
+            </div>
+          </div>
+
+        </div>
+        <div style="flex:none;display:flex;align-items:center;gap:13px;padding:10px 22px;border-top:1px solid var(--border);background:var(--chrome)">
+          <span id="g-ready" class="chip" style="padding:8px 12px;font-size:12.5px"></span>
+          <span style="flex:1"></span>
+          <button class="btn" id="afc-run-sel" style="display:none">Run Selected</button>
+          <button class="btn" id="afc-run-all" style="display:none">Run All Keys</button>
+          <button class="btn primary" id="afc-update" style="display:none">Update Config</button>
+          <button class="btn primary" id="g-generate" disabled>Generate Assets</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- coming-soon stub -->
+    <div id="module-stub" style="flex:1;display:none;align-items:center;justify-content:center">
+      <div style="max-width:460px;text-align:center;padding:40px;display:flex;flex-direction:column;align-items:center;gap:14px">
+        <div style="display:flex;align-items:center;gap:10px"><span id="stub-title" style="font-size:20px;font-weight:700;color:var(--text-hi)"></span><span class="chip" style="color:var(--warn-text);background:rgba(226,177,90,.1);border:1px solid rgba(226,177,90,.3)">COMING SOON</span></div>
+        <div id="stub-blurb" style="font-size:13.5px;line-height:1.6;color:var(--text-sec)"></div>
+        <button class="btn primary" id="stub-back">← Back to API Test Automation</button>
+      </div>
+    </div>
+  </div>
+</div>
+<div id="toast"></div>
+
+<script>
+'use strict';
+const $ = id => document.getElementById(id);
+const has = v => v !== undefined && v !== null && String(v).trim() !== '';
+
+  // ── Ortoni report viewer ──────────────────────────────────────────────────
+  function showReport(url, absPath) {
+    const overlay = $('report-overlay'), frame = $('report-frame');
+    $('report-name').textContent = absPath ? absPath.split('/').pop() : '';
+    $('report-newtab').href = url;
+    frame.src = url;                       // same origin -> never popup-blocked
+    overlay.classList.add('open');
+  }
+  function hideReport() {
+    $('report-overlay').classList.remove('open');
+    $('report-frame').src = 'about:blank';  // stop the iframe holding 1.4MB alive
+  }
+  $('report-close').addEventListener('click', hideReport);
+  $('report-overlay').addEventListener('click', e => {
+    if (e.target === $('report-overlay')) hideReport();   // click the backdrop
+  });
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape' && $('report-overlay').classList.contains('open')) hideReport();
+  });
+
+  let toastT; function toast(m){ $('toast').textContent = m; $('toast').classList.add('show'); clearTimeout(toastT); toastT = setTimeout(()=>$('toast').classList.remove('show'), 3400); }
+
+/* ══════════════════ VERIFIED GENERATION CORE ══════════════════
+   Lifted verbatim from the shipped Row Builder (commit 9aa092d) and the
+   20/20 verified run of 18 Jul. Do not restyle this block — it is the
+   engine contract. Changes here require re-running the verification loop. */
+
+// NEGATIVE MATRIX — rules lifted from the reference workbook, encoded and
+// guarded by integration/matrix-rules.test.mjs (20/20 categories).
+const NEG_RULES = {
+  payload: [
+    { key: 'emptyPayload', label: 'Empty payload', status: 400 },
+    { key: 'invalidJson',  label: 'Invalid JSON',  status: 400 },
+  ],
+  perField: [
+    { key: 'missingField', label: f => 'Missing ' + f, status: 400 },
+    { key: 'invalidField', label: f => 'Invalid ' + f, status: 400 },
+  ],
+  accept: [
+    { value: 'application/xml', label: 'Invalid Header XML',  status: 406 },
+    { value: 'text/html',       label: 'Invalid Header HTML', status: 406 },
+    { value: 'text/plain',      label: 'Invalid Header TEXT', status: 406 },
+    { value: 'image/png',       label: 'Invalid Header PNG',  status: 406 },
+    { value: 'application/pdf', label: 'Invalid Header PDF',  status: 406 },
+  ],
+  contentType: { label: 'Invalid Content Type', status: 415 },
+  endpoint:    { label: 'Invalid Endpoint',     status: 404 },
+  methods: ['GET','POST','PUT','PATCH','DELETE','OPTIONS','HEAD'],
+  unsupportedStatus: 405,
+};
+
+// Minimal RAML DataType field reader for the PREVIEW only. generator.py's
+// parse_raml_datatype is authoritative for what actually gets generated; this
+// just keeps the Derived Scenarios' Missing/Invalid codes honest on screen.
+// Returns { field: { type, required } } or null.
+const RAML_STRINGLY = new Set(['string','any','file','nil']);
+function parseRamlFields(text) {
+  if (!text || !/properties\s*:/.test(text)) return null;
+  const lines = text.replace(/\r/g,'').split('\n');
+  let inProps = false, propIndent = -1, cur = null, curIndent = -1;
+  const out = {};
+  for (const line of lines) {
+    if (/^\s*#/.test(line) || !line.trim()) continue;
+    const m = line.match(/^(\s*)([A-Za-z0-9_$?-]+)\s*:\s*(.*)$/);
+    if (!m) continue;
+    const indent = m[1].length, key = m[2], val = (m[3]||'').trim();
+    if (!inProps) { if (key === 'properties') { inProps = true; propIndent = indent; } continue; }
+    if (indent <= propIndent) { inProps = false; cur = null; continue; }
+    if (cur === null || indent <= curIndent) {
+      let name = key, required = true;
+      if (name.endsWith('?')) { name = name.slice(0,-1); required = false; }
+      let type = 'string';
+      if (val.startsWith('{')) {
+        const tm = val.match(/type\s*:\s*['"]?([A-Za-z0-9_|\[\] ]+)/); if (tm) type = tm[1];
+        const rm = val.match(/required\s*:\s*(true|false)/); if (rm) required = rm[1] === 'true';
+      } else if (val) { type = val; }
+      type = String(type).split('|')[0].replace('[]','').trim().toLowerCase();
+      out[name] = { type, required };
+      cur = name; curIndent = indent;
+    } else {
+      if (key === 'type') out[cur].type = val.split('|')[0].replace('[]','').trim().toLowerCase();
+      else if (key === 'required') out[cur].required = /true/i.test(val);
+    }
+  }
+  return Object.keys(out).length ? out : null;
+}
+function buildNegativeRows(base, carriesBody) {
+  const rows = [];
+  const svc = base.name;
+  const payload = base.__requestJson;
+  // contractFile deliberately stripped: negatives mutate endpoint/status, and
+  // ContractValidator's exact api.paths[endpoint] lookup throws on unknowns.
+  const mk = (label, over) => ({ ...base, name: svc + ' - ' + label, __expectedJson: undefined, expectedFile: '', contractFile: '', ...over });
+  if (carriesBody && payload) {
+    for (const r of NEG_RULES.payload) rows.push(mk(r.label, { expectedStatus: r.status, payloadMutation: r.key }));
+    const raml = parseRamlFields(($('f-raml') || {}).value);
+    const happy = base.expectedStatus;
+    if (typeof payload === 'object')   // per-field rows need fields — XML (raw string) payloads skip them
+      for (const f of Object.keys(payload)) for (const r of NEG_RULES.perField) {
+        let st = r.status;
+        if (raml && raml[f]) {
+          if (r.key === 'missingField') st = raml[f].required ? 400 : happy;
+          else if (r.key === 'invalidField') st = RAML_STRINGLY.has(raml[f].type) ? happy : 400;
+        }
+        rows.push(mk(r.label(f), { expectedStatus: st, payloadMutation: r.key + ':' + f }));
+      }
+    for (const a of NEG_RULES.accept)
+      rows.push(mk(a.label, { expectedStatus: a.status, headers: { ...(base.headers || {}), Accept: a.value } }));
+    rows.push(mk(NEG_RULES.contentType.label, { expectedStatus: NEG_RULES.contentType.status, headers: { ...(base.headers || {}), 'Content-Type': 'text/plain' } }));
+  }
+  rows.push(mk(NEG_RULES.endpoint.label, { expectedStatus: 404, endpoint: base.endpoint + '-does-not-exist' }));
+  for (const m of NEG_RULES.methods) {
+    if (m === base.method) continue;
+    rows.push(mk('Unsupported ' + m, { expectedStatus: NEG_RULES.unsupportedStatus, method: m }));
+  }
+  return rows;
+}
+
+// Contract generation — literal paths by design (exact api.paths lookup).
+// Verified 18 Jul against swagger-parser@10.0.3 + openapi-response-validator@12.1.3.
+function opToSchema(val) {
+  if (typeof val !== 'string' || !val.startsWith('__')) return null;
+  const op = val.split(':')[0];
+  const NUM = ['__GT__','__GTE__','__LT__','__LTE__','__BETWEEN__'];
+  const STR = ['__REGEX__','__STARTS_WITH__','__ENDS_WITH__','__ONE_OF__','__CONTAINS__'];
+  if (op === '__TYPE__') {
+    const t = val.split(':')[1];
+    const map = { number:'number', string:'string', boolean:'boolean', object:'object' };
+    return map[t] ? { type: map[t] } : {};
+  }
+  if (NUM.includes(op)) return { type: 'number' };
+  if (STR.includes(op)) return { type: 'string' };
+  return {};
+}
+function jsonToOpenApiSchema(node) {
+  const opSchema = opToSchema(node);
+  if (opSchema) return opSchema;
+  if (node === null) return {};
+  if (Array.isArray(node)) return node.length ? { type:'array', items: jsonToOpenApiSchema(node[0]) } : { type:'array' };
+  switch (typeof node) {
+    case 'number':  return { type:'number' };
+    case 'string':  return { type:'string' };
+    case 'boolean': return { type:'boolean' };
+    case 'object': { const p={}; for (const [k,v] of Object.entries(node)) p[k]=jsonToOpenApiSchema(v); return { type:'object', properties:p }; }
+    default: return {};
+  }
+}
+function toYaml(node, indent) {
+  indent = indent || 0;
+  const pad = '  '.repeat(indent);
+  const key = k => /^[A-Za-z0-9_.-]+$/.test(k) ? k : "'" + k.replace(/'/g,"''") + "'";
+  const scalar = v => (typeof v==='number'||typeof v==='boolean') ? String(v)
+    : (/^[A-Za-z0-9 _./-]+$/.test(v) && !/^\d/.test(v)) ? v : "'" + String(v).replace(/'/g,"''") + "'";
+  if (Array.isArray(node)) return node.map(v => (typeof v==='object'&&v!==null) ? pad+'-\n'+toYaml(v,indent+1) : pad+'- '+scalar(v)+'\n').join('');
+  if (node !== null && typeof node === 'object') {
+    let out='';
+    for (const [k,v] of Object.entries(node)) {
+      if (v!==null && typeof v==='object' && Object.keys(v).length) out += pad+key(k)+':\n'+toYaml(v,indent+1);
+      else if (v!==null && typeof v==='object') out += pad+key(k)+': {}\n';
+      else out += pad+key(k)+': '+scalar(v)+'\n';
+    }
+    return out;
+  }
+  return pad+scalar(node)+'\n';
+}
+function buildContractYaml(apiName, rows) {
+  const paths = {};
+  for (const r of rows) {
+    if (!r.__expectedJson) continue;
+    const ep = r.endpoint, m = String(r.method||'GET').toLowerCase(), st = String(r.expectedStatus ?? 200);
+    paths[ep] = paths[ep] || {};
+    paths[ep][m] = paths[ep][m] || { responses: {} };
+    paths[ep][m].responses[st] = {
+      description: 'Expected response (generated from Studio Expected Response JSON)',
+      content: { 'application/json': { schema: jsonToOpenApiSchema(r.__expectedJson) } }
+    };
+  }
+  if (!Object.keys(paths).length) return null;
+  return '# Generated by TestHub Automation Studio — literal paths by design:\n' +
+         '# ContractValidator.validate() does an exact api.paths[endpoint] lookup,\n' +
+         '# so parameterized templates like /api/users/{id} would not match.\n' +
+         '# Regenerate from the Studio rather than hand-editing.\n' +
+         toYaml({ openapi:'3.0.0', info:{ title: apiName + ' API (generated by TestHub Automation Studio)', version:'1.0.0' }, paths });
+}
+
+const COLS_F = ['name','endpoint','method','expectedStatus','service','authType','headers','requestBodyFile','payloadMutation','expectedFile','maxResponseMs','extractField','injectAs','cleanupEndpoint','cleanupMethod','contractFile'];
+const cellify = (v) => v === undefined ? '' : (typeof v === 'object' ? JSON.stringify(v) : v);
+
+const SPEC_TPL = "import { test, expect } from '@playwright/test';\nimport fs from 'fs';\n\nimport { APIClient } from '__REL__src/client/apiClient';\nimport { DataLoader } from '__REL__src/utils/dataLoader';\nimport { RequestBuilder } from '__REL__src/utils/requestBuilder';\nimport { SmartComparator } from '__REL__src/utils/smartComparator';\nimport { AuthStrategyResolver } from '__REL__src/auth/AuthStrategyResolver';\nimport { ReportHelper } from '__REL__src/utils/reportHelper';\nimport { ContractValidator } from '__REL__src/validators/contractValidator';\nimport { ContextStore } from '__REL__src/utils/contextStore';\nimport { Config } from '__REL__config/config';\n\n// Generated by TestHub Automation Studio \u2014 regenerate from the Studio\n// rather than hand-editing. Structure matches tests/api/crudExcel.spec.ts.\nconst testData = DataLoader.loadExcel('__EXCEL__', '__SHEET__');\n\n// Serial mode ensures test-chaining (extractField \u2192 injectAs) runs in order\ntest.describe.configure({ mode: 'serial' });\n\ntest.describe('__DESCRIBE__', () => {\n\n    for (const row of testData) {\n\n        test(`[${row.method}] ${row.name}`, async ({}, testInfo) => {\n\n            const client  = new APIClient();\n            await client.init();\n\n            const baseUrl = Config.getServiceUrl(row.service);\n            const auth    = AuthStrategyResolver.resolve(row.authType);\n\n            // \u2500\u2500 STEP 1: Build Request \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\n            const request = await test.step('Build Request', async () => {\n                return await RequestBuilder.build(row, baseUrl, auth);\n            });\n\n            ReportHelper.attachRequest(testInfo, request);\n\n            // \u2500\u2500 STEP 2: Send Request \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\n            const response = await test.step('Send Request', async () => {\n                return await client.send(request);\n            });\n\n            const status = response.status();\n            const body   = status !== 204 ? await response.json() : null;\n\n            ReportHelper.attachResponse(testInfo, status, body);\n\n            // \u2500\u2500 STEP 3: Validate Status \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\n            await test.step('Validate Status', async () => {\n                expect(\n                    status,\n                    `Expected ${row.expected.status}, got ${status} for ${row.method} ${row.endpoint}`\n                ).toBe(row.expected.status);\n            });\n\n            // \u2500\u2500 STEP 4: Validate Response Time \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\n            if (row.expected.maxResponseMs !== undefined) {\n                await test.step(`Validate Response Time \u2264 ${row.expected.maxResponseMs}ms`, async () => {\n                    expect(\n                        response.elapsedMs,\n                        `Response time ${response.elapsedMs}ms exceeded limit of ${row.expected.maxResponseMs}ms`\n                    ).toBeLessThanOrEqual(row.expected.maxResponseMs!);\n                });\n            }\n\n            // \u2500\u2500 STEP 5: Validate Response Body \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\n            if (body && row.expected.file) {\n                await test.step('Validate Response Body', async () => {\n                    const expectedJson = JSON.parse(fs.readFileSync(row.expected.file!, 'utf-8'));\n                    SmartComparator.compare(body, expectedJson);\n                });\n            }\n\n            // \u2500\u2500 STEP 6: Contract Validation \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\n            if (body && row.contractFile) {\n                await test.step('Validate Response Schema (OpenAPI)', async () => {\n                    try {\n                        await ContractValidator.validate(\n                            row.contractFile!,\n                            row.endpoint,\n                            row.method,\n                            status,\n                            body\n                        );\n                    } catch (err: any) {\n                        if (err.message?.startsWith('No schema found')) {\n                            testInfo.annotations.push({\n                                type: 'Schema',\n                                description: `No contract defined for ${row.method} ${row.endpoint} \u2014 skipped`\n                            });\n                            return;\n                        }\n                        throw err;\n                    }\n                });\n            }\n\n            // \u2500\u2500 STEP 7: Extract & Store Context Value \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\n            if (body && row.extractField && row.injectAs) {\n                await test.step(`Extract \\\"${row.extractField}\\\" \u2192 ctx:${row.injectAs}`, async () => {\n                    const value = ContextStore.extract(body, row.extractField!);\n                    if (value === undefined || value === null) {\n                        throw new Error(\n                            `extractField \\\"${row.extractField}\\\" not found in response body`\n                        );\n                    }\n                    ContextStore.set(row.injectAs!, value);\n                });\n            }\n\n            // \u2500\u2500 STEP 8: Cleanup \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\n            if (row.cleanupEndpoint) {\n                await test.step(`Cleanup: ${row.cleanupMethod} ${row.cleanupEndpoint}`, async () => {\n                    const cleanupRow = {\n                        endpoint:    row.cleanupEndpoint,\n                        method:      row.cleanupMethod ?? 'DELETE',\n                        headers:     row.headers,\n                        requestBody: undefined\n                    };\n                    const cleanupRequest = await RequestBuilder.build(cleanupRow, baseUrl, auth);\n                    await client.send(cleanupRequest);\n                });\n            }\n        });\n    }\n});\n";
+
+/* ══════════════════ END VERIFIED CORE ══════════════════ */
+
+// ── state ──
+// Output paths — defaults match the reference branch conventions
+// (playwright.config testDir: ./src/tests · expected JSON: test-data/json/).
+// Persisted locally; only a user Save changes them.
+const DEFAULT_PATHS = {
+  // Relative to the STUDIO root (the folder holding testhubui/), so every path
+  // names its accelerator. 2026-09-06: the API accelerator moved into its own
+  // folder beside the Studio; the key below was bumped to v3 so a browser that
+  // saved the old root-relative values does not write into the wrong place.
+  request:  'testhub-api-quality-accelerator/src/requestPayload',   // + /<asset>/
+  spec:     'testhub-api-quality-accelerator/src/tests',            // + /<asset>/  (reference testDir)
+  excel:    'testhub-api-quality-accelerator/test-data/excel',
+  response: 'testhub-api-quality-accelerator/test-data/json',       // + /<asset>/
+  raml:     'testhub-api-quality-accelerator/test-data/raml',       // + /<asset>/  RAML DataType evidence
+  // One folder per standalone framework (2026-09-06). Keys match what each
+  // engine reads from cfg.paths; the values are the engines' own defaults.
+  ui:            'testhub-ui-quality-accelerator/tests',
+  ai:            'testhub-ai-agentic-quality-accelerator/tests',
+  aiData:        'testhub-ai-agentic-quality-accelerator/test-data/ai-agentic',
+  sfSpec:        'testhub-salesforce-quality-accelerator/tests/salesforce',
+  sfData:        'testhub-salesforce-quality-accelerator/src/testdata/yaml',
+  perfFramework: 'testhub-performance-quality-accelerator',
+  mobile:        'testhub-mobile-quality-accelerator',
+  security:      'testhub-security-quality-accelerator',
+  llmsec:        'testhub-llm-security-quality-accelerator',
+  agentforce:    'testhub-agentforce-quality-accelerator',
+  contract:      'testhub-contract-quality-accelerator',
+};
+const FRAMEWORK_PATH_KEYS = ['ui', 'ai', 'aiData', 'sfSpec', 'sfData', 'perfFramework', 'mobile', 'security', 'llmsec', 'agentforce', 'contract'];
+let paths = { ...DEFAULT_PATHS };
+try { const sp = JSON.parse(localStorage.getItem('thub-studio-paths-v3') || 'null'); if (sp) paths = { ...DEFAULT_PATHS, ...sp }; } catch {}
+const cleanPath = p => String(p||'').trim().replace(/\\/g,'/').replace(/^\/+|\/+$/g,'');
+const specDepth = () => cleanPath(paths.spec).split('/').filter(Boolean).length + 1; // +1: <asset> subfolder
+const relPrefix = () => '../'.repeat(specDepth());
+
+const bodyMethods = new Set(['POST','PUT','PATCH']);
+let headers = [{ key: 'Accept', value: 'application/json' }];
+let scenarios = { positive: true, negative: true };   // negative matrix on by default — the accelerator's core value
+let generated = null;   // { files: {path: content|Uint8Array}, at: Date }
+let lastGen = null;     // { timings: {path: seconds}, totalTime, at } — per-asset gen time for the Generated Assets view
+// Configurable governed paths (19 Jul): env-segmented defaults, editable.
+let selectedFile = null;
+
+// ── helpers ──
+const slug = () => (($('f-asset').value || '').trim().toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'')) || '';
+const journey = () => ((($('f-svcname').value || '').trim().toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'')) || slug());  // reference layout: src/tests/<journey>/<service>.test.ts — journey drives the Ortoni report path
+const method = () => $('f-method').value;
+const carriesBody = () => bodyMethods.has(method()) || ($('f-getbody').checked && has($('f-payload').value));
+const headersObj = () => { const o = {}; headers.forEach(h => { if (h.key.trim()) o[h.key.trim()] = h.value; }); return o; };
+const parseJsonField = (v) => { if (!has(v)) return { ok: true, val: undefined }; try { return { ok: true, val: JSON.parse(v) }; } catch { return { ok: false }; } };
+const bodyFmt = () => $('f-bodyfmt').value;   // JSON | XML | FORM | URLENCODED | BINARY | MFT
+const parsePayloadField = (v) => {
+  if (bodyFmt() === 'XML') return has(v) ? { ok: /^\s*</.test(v), val: v } : { ok: true, val: undefined };
+  if (bodyFmt() === 'MFT') return { ok: true, val: undefined };   // MFT validity comes from its 4 fields, not this textarea
+  // FORM / URLENCODED are driven by the form table, and BINARY by the file
+  // path field — none of them use the JSON textarea, so it must not gate them.
+  if (bodyFmt() === 'FORM' || bodyFmt() === 'URLENCODED' || bodyFmt() === 'BINARY') {
+    return { ok: true, val: undefined };
+  }
+  return parseJsonField(v);
+};
+
+// FORM / URLENCODED are valid when at least one row has a key, and every
+// file row has a path (a keyed file row with no path can't be uploaded).
+// form-data / urlencoded rows (Postman-style). Declared here — ABOVE formValid()
+// and the first checks() run — so it is never read in the temporal dead zone.
+let formRows = [{ key:'name', type:'text', value:'morpheus' }, { key:'job', type:'text', value:'leader' }];
+
+function formValid() {
+  const rows = formRows.filter(r => r.key && r.key.trim());
+  if (!rows.length) return false;
+  if (bodyFmt() === 'FORM') {
+    return rows.every(r => r.type !== 'file' || (r.value && r.value.trim()));
+  }
+  return true;
+}
+
+// BINARY is valid when a file path is provided.
+function binaryValid() {
+  const el = $('f-binary');
+  return !!(el && el.value.trim());
+}
+
+// MFT Zone is valid when URL, Username, Password-ref and File Path are all filled.
+function mftValid() {
+  return ['mft-url','mft-user','mft-pass','mft-file'].every(id => { const el = $(id); return el && el.value.trim(); });
+}
+function mftPayloadObject() {
+  return {
+    websiteUrl: ($('mft-url')||{}).value?.trim() || '',
+    username:   ($('mft-user')||{}).value?.trim() || '',
+    passwordRef:($('mft-pass')||{}).value?.trim() || '',
+    filePath:   ($('mft-file')||{}).value?.trim() || ''
+  };
+}
+
+function buildBaseRow() {
+  const asset = slug();
+  const payload = parsePayloadField($('f-payload').value);
+  const expected = parsePayloadField($('f-expected').value);
+  const row = {
+    name: asset,
+    endpoint: $('f-endpoint').value.trim(),
+    method: method(),
+    expectedStatus: parseInt($('f-status').value, 10),
+    authType: $('f-auth').value || undefined,
+    headers: Object.keys(headersObj()).length ? headersObj() : undefined,
+  };
+  // Endpoint Type -> the row's `service` column. Config.getServiceUrl(row.service)
+  // resolves it to the internal/external base URL for the selected environment;
+  // left empty, the row falls back to baseUrl (offline example behaviour).
+  { const et = ($('f-endpointtype') || {}).value; if (has(et)) row.service = et; }
+  if (has($('f-maxms').value)) row.maxResponseMs = parseInt($('f-maxms').value, 10);
+  if (carriesBody() && payload.ok && payload.val !== undefined) {
+    row.__requestJson = payload.val;
+    const ext = bodyFmt() === 'XML' ? '.xml' : '.json';
+    row.requestBodyFile = cleanPath(paths.request) + '/' + asset + '/' + asset + ext;
+    if (bodyFmt() === 'XML') row.headers = { ...(row.headers || {}), 'Content-Type': 'application/xml' };
+  }
+  if (expected.ok && expected.val !== undefined) {
+    row.__expectedJson = expected.val;
+    row.expectedFile = cleanPath(paths.response) + '/' + asset + '/' + asset + '.json';
+  }
+  return row;
+}
+
+function derivedRows() {
+  const base = buildBaseRow();
+  const rows = [];
+  if (scenarios.positive) rows.push({ ...base, name: base.name + ' - Happy path' });
+  if (scenarios.negative) rows.push(...buildNegativeRows(base, carriesBody()));
+  return rows;
+}
+
+// ── readiness ──
+function checks() {
+  const payload = parsePayloadField($('f-payload').value);
+  const expected = parsePayloadField($('f-expected').value);
+  const hOk = headers.every(h => h.key.trim().length > 0 || !h.value);
+  return [
+    { label: 'Asset name set',            ok: !!slug() },
+    { label: 'Service name set',          ok: has($('f-svcname').value) },
+    { label: 'Endpoint defined',          ok: has($('f-endpoint').value) },
+    { label: 'Expected status defined',   ok: /^\d{3}$/.test(($('f-status').value||'').trim()) },
+    { label: 'Headers valid',             ok: hOk },
+    { label: bodyFmt()==='XML' ? 'Payload is well-formed XML'
+           : bodyFmt()==='MFT' ? 'MFT Zone fields complete (URL, user, password-ref, file)'
+           : bodyFmt()==='BINARY' ? 'Binary file path set'
+           : (bodyFmt()==='FORM'||bodyFmt()==='URLENCODED') ? 'Form fields present'
+           : 'Payload is valid JSON',
+      ok: bodyFmt()==='MFT' ? mftValid()
+        : bodyFmt()==='BINARY' ? binaryValid()
+        : (bodyFmt()==='FORM'||bodyFmt()==='URLENCODED') ? formValid()
+        : (!carriesBody() || payload.ok) },
+    { label: 'Expected response is valid JSON', ok: expected.ok },
+    { label: 'Scenario type selected',    ok: scenarios.positive || scenarios.negative },
+  ];
+}
+
+// ── rendering ──
+function renderHeaders() {
+  const wrap = $('hdr-rows'); wrap.innerHTML = '';
+  headers.forEach((h, i) => {
+    const row = document.createElement('div'); row.className = 'hdr-row';
+    row.innerHTML = '<input data-i="'+i+'" data-f="key" placeholder="Header" value="'+(h.key||'').replace(/"/g,'&quot;')+'">'
+      + '<input data-i="'+i+'" data-f="value" placeholder="value" style="border-left:1px solid var(--border-faint);color:#9EE6A8" value="'+(h.value||'').replace(/"/g,'&quot;')+'">'
+      + '<button data-i="'+i+'" class="hdr-del" title="Delete" style="background:transparent;border:none;border-left:1px solid var(--border-faint);color:var(--muted)">✕</button>';
+    wrap.appendChild(row);
+  });
+  wrap.querySelectorAll('input').forEach(inp => inp.addEventListener('input', e => {
+    headers[+e.target.dataset.i][e.target.dataset.f] = e.target.value; syncJsonFromTable(); refresh();
+  }));
+  wrap.querySelectorAll('.hdr-del').forEach(b => b.addEventListener('click', e => {
+    headers.splice(+e.currentTarget.dataset.i, 1); renderHeaders(); syncJsonFromTable(); refresh();
+  }));
+}
+function syncJsonFromTable(){ $('hdr-json').value = JSON.stringify(headersObj(), null, 2); $('hdr-json-err').style.display='none'; }
+
+// ── form-data / urlencoded rows (Postman-style) — formRows is declared above ──
+function renderForm() {
+  const wrap = $('form-rows'); if (!wrap) return; wrap.innerHTML = '';
+  const urlenc = bodyFmt() === 'URLENCODED';
+  formRows.forEach((r, i) => {
+    const row = document.createElement('div');
+    row.style.cssText = 'display:grid;grid-template-columns:1fr 96px 1.4fr 34px;align-items:center;border-bottom:1px solid var(--border-faint)';
+    // urlencoded has no files — lock type to text and hide the selector's file option
+    const typeCell = urlenc
+      ? '<span data-i="'+i+'" style="padding:9px 13px;font-size:12.5px;color:var(--muted);border-left:1px solid var(--border-faint)">text</span>'
+      : '<select data-i="'+i+'" data-f="type" style="border:none;border-left:1px solid var(--border-faint);background:transparent;font-size:12.5px;padding:9px 10px;color:var(--text-sec)"><option'+(r.type==='text'?' selected':'')+'>text</option><option'+(r.type==='file'?' selected':'')+'>file</option></select>';
+    const valuePlaceholder = r.type === 'file' ? 'test-data/fixtures/sample.pdf' : 'value';
+    row.innerHTML = '<input data-i="'+i+'" data-f="key" placeholder="key" value="'+(r.key||'').replace(/"/g,'&quot;')+'" style="border:none;background:transparent;padding:9px 13px;font-size:13px">'
+      + typeCell
+      + '<input data-i="'+i+'" data-f="value" placeholder="'+valuePlaceholder+'" value="'+(r.value||'').replace(/"/g,'&quot;')+'" style="border:none;border-left:1px solid var(--border-faint);background:transparent;padding:9px 13px;font-size:13px;color:'+(r.type==='file'?'#E2B15A':'#9EE6A8')+'">'
+      + '<button data-i="'+i+'" class="form-del" title="Delete" style="background:transparent;border:none;border-left:1px solid var(--border-faint);color:var(--muted);cursor:pointer">✕</button>';
+    wrap.appendChild(row);
+  });
+  wrap.querySelectorAll('input,select').forEach(el => el.addEventListener('input', e => {
+    formRows[+e.target.dataset.i][e.target.dataset.f] = e.target.value;
+    if (e.target.dataset.f === 'type') renderForm();
+    refresh();
+  }));
+  wrap.querySelectorAll('.form-del').forEach(b => b.addEventListener('click', e => {
+    formRows.splice(+e.currentTarget.dataset.i, 1); renderForm(); refresh();
+  }));
+}
+// Build the payload the backend expects from the form table
+function formPayloadObject() {
+  const fields = {}, files = [];
+  for (const r of formRows) {
+    if (!r.key.trim()) continue;
+    if (r.type === 'file') files.push({ field: r.key, path: r.value });
+    else fields[r.key] = r.value;
+  }
+  return { fields, files };
+}
+
+/** Escapes text for safe HTML-content interpolation (row names/endpoints in
+ *  the Derived Scenarios preview echo the field names a user pasted into the
+ *  request payload — e.g. "Missing " + fieldName — so they must never go into
+ *  innerHTML unescaped). */
+function esc(v) { return String(v == null ? '' : v).replace(/[&<>]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[c])); }
+
+function refresh() {
+  const asset = slug() || 'unnamed-asset';
+  const m = method();
+  // GET-body toggle visibility
+  const isBodyMethod = bodyMethods.has(m);
+  $('get-body-toggle').style.display = isBodyMethod ? 'none' : 'flex';
+  $('get-body-method').textContent = m; $('no-payload-method').textContent = m;
+  const fmt = bodyFmt();
+  const isMft = fmt === 'MFT';
+  // MFT Zone is GET-only — force the method and lock the selector while selected.
+  if (isMft && method() !== 'GET') { $('f-method').value = 'GET'; }
+  $('f-method').disabled = isMft;
+  const m2 = method();
+  const xml = fmt === 'XML';
+  $('xml-note').style.display = xml ? 'block' : 'none';
+  $('f-payload').placeholder = xml ? '<client><id>demo1</id><name>Morpheus</name></client>' : '{ "id": "demo1", "name": "Morpheus" }';
+  // MFT captures its own fields, so it always shows its panel regardless of body toggle
+  const showPayload = isBodyMethod || $('f-getbody').checked || isMft;
+  $('payload-wrap').style.display = showPayload ? 'block' : 'none';
+  $('no-payload').style.display = (showPayload) ? 'none' : 'flex';
+
+  // Payload control adapts to Body Format (Postman-style):
+  //   FORM / URLENCODED → key/value table    BINARY → file picker    MFT → 4-field panel    else → text editor
+  const isForm = fmt === 'FORM' || fmt === 'URLENCODED';
+  const isBinary = fmt === 'BINARY';
+  const textEditor = !isForm && !isBinary && !isMft;
+  if ($('form-table-wrap')) $('form-table-wrap').style.display = showPayload && isForm ? 'block' : 'none';
+  if ($('binary-wrap'))     $('binary-wrap').style.display     = showPayload && isBinary ? 'block' : 'none';
+  if ($('mft-wrap'))        $('mft-wrap').style.display        = isMft ? 'block' : 'none';
+  $('f-payload').style.display = showPayload && textEditor ? 'block' : 'none';
+  $('payload-hint').style.display = textEditor ? 'block' : 'none';
+  if (showPayload && isForm) renderForm();
+
+  // scenario visuals
+  $('scn-pos').classList.toggle('on', scenarios.positive);
+  $('scn-neg').classList.toggle('on', scenarios.negative);
+  $('scn-pos').querySelector('svg').style.display = scenarios.positive ? 'block' : 'none';
+  $('scn-neg').querySelector('svg').style.display = scenarios.negative ? 'block' : 'none';
+
+  const rows = derivedRows();
+  $('scn-count').textContent = rows.length;
+
+  // readiness
+  const cs = checks(); const passed = cs.filter(c=>c.ok).length; const all = passed === cs.length;
+  $('btn-generate').disabled = !all;
+  const rc = $('ready-chip');
+  rc.textContent = all ? 'Ready to generate · ' + passed + '/' + cs.length : (cs.length - passed) + ' of ' + cs.length + ' checks remaining';
+  rc.style.cssText = 'padding:8px 12px;font-size:12.5px;font-weight:600;border-radius:8px;' + (all
+    ? 'background:rgba(46,173,110,.10);border:1px solid rgba(46,173,110,.32);color:var(--success-text)'
+    : 'background:rgba(226,177,90,.10);border:1px solid rgba(226,177,90,.32);color:var(--warn-text)');
+  $('ready-banner').innerHTML = '<div style="border-radius:12px;padding:12px 15px;margin-bottom:16px;border:1px solid '
+    + (all ? 'rgba(46,173,110,.32);background:rgba(46,173,110,.10)' : 'rgba(226,177,90,.3);background:rgba(226,177,90,.08)') + '">'
+    + '<div style="font-size:13.5px;font-weight:700;color:' + (all ? 'var(--success-text)' : 'var(--warn-text)') + '">' + (all ? 'Ready to Generate' : 'Not ready yet') + '</div>'
+    + '<div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:8px">'
+    + cs.map(c => '<span class="check-row" style="margin:0"><span class="check-dot ' + (c.ok?'ok':'') + '">' + (c.ok?'✓':'·') + '</span><span style="font-size:12px;color:' + (c.ok?'var(--text-2)':'var(--muted)') + '">' + c.label + '</span></span>').join('')
+    + '</div></div>';
+
+  $('pv-name').textContent = asset;
+
+  // asset list — with per-asset generation-time counter (proves the engine did real work)
+  const files = assetManifest(asset, rows);
+  const gt = lastGen ? lastGen.timings : null;
+  const matchTime = (fname) => {
+    if (!gt) return null;
+    const stem = fname.split('.')[0];
+    const key = Object.keys(gt).find(k => k.endsWith('/' + fname) || k.endsWith('\\' + fname) || k.includes('/' + stem + '.') || k.includes('\\' + stem + '.'));
+    return key ? gt[key] : null;
+  };
+  $('asset-list').innerHTML = files.map(f => {
+    const t = matchTime(f.name);
+    const timeChip = t !== null
+      ? '<span class="mono" style="font-size:11px;font-weight:700;color:var(--accent-text);white-space:nowrap;margin-right:8px">' + t.toFixed(2) + 's</span>'
+      : '';
+    return '<div class="file-row"><span class="badge" style="background:' + f.bg + ';color:' + f.fg + ';border:' + (f.bd||'none') + '">' + f.tag + '</span>'
+    + '<div style="flex:1;min-width:0"><div class="mono" style="font-size:13px;font-weight:600;word-break:break-all">' + f.name + '</div>'
+    + '<div style="font-size:11.5px;color:var(--muted);margin-top:3px">' + f.desc + '</div></div>'
+    + timeChip
+    + '<span style="font-size:11px;font-weight:600;color:var(--text-sec);background:var(--fill-1);border:1px solid var(--border-3);border-radius:8px;padding:5px 11px;white-space:nowrap">' + f.cat + '</span></div>';
+  }).join('')
+  + (lastGen ? '<div style="display:flex;align-items:center;justify-content:space-between;padding:9px 13px;margin-top:2px;background:rgba(255,106,26,.05);border:1px solid rgba(255,106,26,.15);border-radius:10px">'
+      + '<span style="font-size:12px;font-weight:700;color:var(--text-2)">' + files.length + ' assets generated</span>'
+      + '<span class="mono" style="font-size:12.5px;font-weight:700;color:var(--accent-text)">' + lastGen.totalTime.toFixed(2) + 's total</span></div>' : '');
+
+  // scenario rows tab
+  $('scn-rows').innerHTML = rows.map(r =>
+    '<div style="display:flex;align-items:center;gap:11px;padding:10px 13px;background:var(--panel);border:1px solid var(--border);border-radius:10px">'
+    + '<span class="chip mono" style="background:var(--fill-1);color:var(--text-sec);border:1px solid var(--border-2)">' + r.method + '</span>'
+    + '<span style="flex:1;font-size:12.5px;font-weight:600;color:var(--text-2);overflow:hidden;text-overflow:ellipsis;white-space:nowrap">' + esc(r.name) + '</span>'
+    + '<span class="mono" style="font-size:11.5px;color:var(--muted)">' + esc(r.endpoint) + '</span>'
+    + '<span class="chip mono" style="background:' + (String(r.expectedStatus)[0]==='2' ? 'rgba(46,173,110,.14);color:var(--success-text)' : 'rgba(226,177,90,.12);color:var(--warn-text)') + '">' + r.expectedStatus + '</span></div>').join('');
+}
+
+function assetManifest(asset, rows) {
+  const hasBody = rows.some(r => r.requestBodyFile);
+  const hasExpected = rows.some(r => r.__expectedJson);
+  const hasRaml = has(($('f-raml') || {}).value);
+  const f = [];
+  f.push({ tag:'XLS', bg:'#1D6F42', fg:'#fff', name: asset + '-tests.xlsx', cat:'Test Data Sheet', desc: rows.length + ' row' + (rows.length===1?'':'s') + ' — execution metadata, scenarios and assertions', path: cleanPath(paths.excel) + '/' + asset + '-tests.xlsx' });
+  if (hasBody) f.push({ tag:'{ }', bg:'rgba(76,158,240,.12)', fg:'#5AA6F5', bd:'1px solid rgba(76,158,240,.4)', name: asset + '.json', cat:'Request Payload', desc:'API request payload, wired via requestBodyFile', path: cleanPath(paths.request) + '/' + asset + '/' + asset + '.json' });
+  if (hasExpected) f.push({ tag:'{ }', bg:'rgba(46,173,110,.12)', fg:'#4FD98C', bd:'1px solid rgba(46,173,110,.4)', name: asset + '.json', cat:'Response Payload', desc:'Expected response for SmartComparator validation', path: cleanPath(paths.response) + '/' + asset + '/' + asset + '.json' });
+  if (hasExpected) f.push({ tag:'YML', bg:'rgba(167,139,250,.12)', fg:'#A78BFA', bd:'1px solid rgba(167,139,250,.4)', name: asset + '.yaml', cat:'OpenAPI Contract', desc:'Schema validation contract, generated from the expected response', path:'contracts/openapi/' + asset + '.yaml' });
+  f.push({ tag:'TS', bg:'#2C6BB8', fg:'#fff', name: asset + '.test.ts', cat:'Test Specification', desc:'One dynamic Playwright spec — every Excel row becomes a report test', path: cleanPath(paths.spec) + '/' + journey() + '/' + asset + '.test.ts' });
+  if (hasRaml) f.push({ tag:'RAML', bg:'rgba(226,177,90,.12)', fg:'#E2B15A', bd:'1px solid rgba(226,177,90,.4)', name: asset + '.raml', cat:'RAML DataType', desc:'Request-body contract — drives the Missing/Invalid expected codes; saved as evidence', path: cleanPath(paths.raml) + '/' + asset + '/' + asset + '.raml' });
+  f.push({ tag:'TXT', bg:'rgba(255,255,255,.06)', fg:'var(--text-sec)', bd:'1px solid var(--border-3)', name:'README-UNPACK.txt', cat:'Setup Instructions', desc:'Unzip at the accelerator root — folders map 1:1', path:'README-UNPACK.txt' });
+  return f;
+}
+
+// ── generation (real) ── [REMOVED]
+// The client-side zip generator (generateAssets/downloadZip/renderFilesTab) was
+// dead code: `rewire('btn-generate', …)` replaces this button to POST /api/generate,
+// and initRunner() replaces the Generated Assets panel with the live Test Runner.
+// The Python backend (generator.py) is the single source of truth for asset generation.
+
+// ── capabilities rail ──
+// 16 Sep client call: only API and Performance ship complete. The rest stay
+// listed (so the roadmap is honest, not hidden) but `live:false` routes them
+// to the SOON stub instead of a live panel — matches the backend gate in
+// engines/base.py's ACTIVE_ENGINE_IDS. Flip live:true back on here once an
+// accelerator is done; nothing else about this array needs to change.
+const NOT_YET_BLURB = 'Not in this build yet — coming back once this accelerator is complete.';
+const MODULES = [
+  { id:'api',  title:'API Test Automation', desc:'Automate, Validate and Assure Your APIs', live:true, panel:'module-api' },
+  { id:'perf', title:'Performance Testing', desc:'Load, Stress and Performance Assurance', live:true, panel:'module-generic' },
+  { id:'ui',  title:'UI Test Automation', desc:'Web and Custom UI Testing', live:false, blurb:NOT_YET_BLURB, panel:'module-ui' },
+  { id:'mob',  title:'Mobile Test Automation', desc:'iOS, Android and Hybrid App Testing', live:false, blurb:NOT_YET_BLURB, panel:'module-generic' },
+  { id:'sf',   title:'Salesforce Test Automation', desc:'Salesforce UI, Flows and Platform Testing', live:false, blurb:NOT_YET_BLURB, panel:'module-sf' },
+  { id:'sec', title:'Security Testing', desc:'API Security and Vulnerability Testing', live:false, blurb:NOT_YET_BLURB, panel:'module-generic' },
+  { id:'af',   title:'Agentforce Testing', desc:'Salesforce Agentforce Trust Assurance', live:false, blurb:NOT_YET_BLURB, panel:'module-generic' },
+  { id:'ai',   title:'AI Agentic Testing', desc:'AI Agents, Orchestration and Trust Assurance', live:false, blurb:NOT_YET_BLURB, panel:'module-generic' },
+  { id:'llmsec', title:'LLM Security Scanning', desc:'Adversarial Probing of Models and Agents', live:false, blurb:NOT_YET_BLURB, panel:'module-generic' },
+  { id:'afc',  title:'Agentforce Configuration', desc:'Suite Registry and Test Execution', live:false, blurb:NOT_YET_BLURB, panel:'module-generic' },
+];
+function renderRail() {
+  const rail = $('rail');
+  MODULES.forEach(m => {
+    const b = document.createElement('button');
+    // Only the module shown on load (API, the first entry) starts highlighted;
+    // the click handler below moves the highlight to whichever tab is clicked.
+    b.className = 'rail-btn' + (m === MODULES[0] ? ' active' : '');
+    b.innerHTML = '<span class="rail-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="' + (m.live?'#FF8A45':'#5AA6F5') + '" stroke-width="1.8" stroke-linecap="round"><path d="m16 18 6-6-6-6"/><path d="m8 6-6 6 6 6"/></svg></span>'
+      + '<span style="flex:1;min-width:0"><span style="display:flex;align-items:center;gap:7px"><span style="font-size:13px;font-weight:700;color:' + (m.live?'var(--accent-text)':'var(--text-2)') + '">' + m.title + '</span>'
+      + (m.live ? '' : '<span class="chip" style="font-size:8px;color:var(--muted);background:var(--fill-1);border:1px solid var(--border-2)">SOON</span>') + '</span>'
+      + '<span style="display:block;font-size:11.5px;color:var(--muted);margin-top:2px">' + m.desc + '</span></span>';
+    b.addEventListener('click', () => {
+      document.querySelectorAll('.rail-btn').forEach(x => x.classList.remove('active'));
+      b.classList.add('active');
+      // module-api-preview is a sibling of module-api, not a child (see the note
+      // on that element), so it must be toggled by hand alongside it.
+      const panels = ['module-api', 'module-api-preview', 'module-ui', 'module-sf',
+                      'module-generic', 'module-stub'];
+      panels.forEach(p => { const el = $(p); if (el) el.style.display = 'none'; });
+      if (m.live && m.panel) {
+        $(m.panel).style.display = 'flex';
+        if (m.panel === 'module-api') $('module-api-preview').style.display = 'flex';
+        if (m.panel === 'module-generic' && window.__mountEngine) window.__mountEngine(m.id);
+      } else {
+        $('module-stub').style.display = 'flex';
+        $('stub-title').textContent = m.title;
+        $('stub-blurb').textContent = m.blurb;
+      }
+      // The header's generate/readiness chrome belongs to the API engine; the
+      // UI engine carries its own footer controls.
+      const apiChrome = m.panel === 'module-api';
+      ['ready-chip', 'btn-generate', 'save-draft', 'clear-draft'].forEach(id => {
+        const el = $(id); if (el) el.style.display = apiChrome ? '' : 'none';
+      });
+    });
+    rail.appendChild(b);
+  });
+}
+
+// ── wiring ──
+['f-asset','f-svcname','f-endpoint','f-status','f-maxms','f-payload','f-expected','f-raml'].forEach(id => { const el=$(id); if (el) el.addEventListener('input', refresh); });
+['mft-url','mft-user','mft-pass','mft-file'].forEach(id => { const el = $(id); if (el) el.addEventListener('input', refresh); });
+{ const el = $('f-binary'); if (el) el.addEventListener('input', refresh); }
+['f-method','f-auth','f-env','f-bodyfmt','f-endpointtype'].forEach(id => $(id).addEventListener('change', refresh));
+
+// Meeting 21 Jul — body format drives the headers: JSON ⇄ XML switches
+// Content-Type and Accept together, both in the table and the JSON view.
+$('f-bodyfmt').addEventListener('change', () => {
+  // Content-Type is the request wire format; Accept is the *response* format.
+  // Form/urlencoded requests still receive JSON responses, so Accept stays JSON.
+  const MIMES = {
+    JSON:       { ct: 'application/json',                  accept: 'application/json' },
+    XML:        { ct: 'application/xml',                   accept: 'application/xml'  },
+    FORM:       { ct: 'multipart/form-data',              accept: 'application/json' },
+    URLENCODED: { ct: 'application/x-www-form-urlencoded', accept: 'application/json' },
+    BINARY:     { ct: 'application/octet-stream',          accept: 'application/json' },
+    MFT:        { ct: 'text/plain',                        accept: 'application/json' },
+  };
+  const sel = MIMES[bodyFmt()] || MIMES.JSON;
+  const allCT     = Object.values(MIMES).map(m => m.ct);
+  const allAccept = Object.values(MIMES).map(m => m.accept);
+  const otherCT     = allCT.filter(m => m !== sel.ct);
+  const otherAccept = allAccept.filter(m => m !== sel.accept);
+  let hasCT = false, hasAcc = false;
+  headers.forEach(h => {
+    const k = h.key.trim().toLowerCase();
+    if (k === 'content-type') { hasCT = true; if (otherCT.includes(h.value) || !h.value) h.value = sel.ct; }
+    if (k === 'accept')       { hasAcc = true; if (otherAccept.includes(h.value) || !h.value) h.value = sel.accept; }
+  });
+  if (!hasAcc) headers.push({ key: 'Accept', value: sel.accept });
+  if (carriesBody() && !hasCT) headers.push({ key: 'Content-Type', value: sel.ct });
+  renderHeaders(); syncJsonFromTable(); refresh();
+});
+$('f-getbody').addEventListener('change', refresh);
+if ($('form-add')) $('form-add').addEventListener('click', () => { formRows.push({ key:'', type:'text', value:'' }); renderForm(); refresh(); });
+$('scn-pos').addEventListener('click', () => { scenarios.positive = !scenarios.positive; refresh(); });
+$('scn-neg').addEventListener('click', () => { scenarios.negative = !scenarios.negative; refresh(); });
+$('btn-add-hdr').addEventListener('click', () => { headers.push({ key:'', value:'' }); renderHeaders(); refresh(); });
+$('hdr-json').addEventListener('input', e => {
+  try {
+    const o = JSON.parse(e.target.value);
+    if (o && typeof o === 'object' && !Array.isArray(o)) { headers = Object.entries(o).map(([k,v]) => ({ key:k, value:String(v) })); renderHeaders(); $('hdr-json-err').style.display='none'; }
+    else { $('hdr-json-err').textContent = 'Expected a JSON object of header:value pairs'; $('hdr-json-err').style.display='block'; }
+  } catch { $('hdr-json-err').textContent = 'Invalid JSON'; $('hdr-json-err').style.display='block'; }
+  refresh();
+});
+document.querySelectorAll('.tab').forEach(t => t.addEventListener('click', e => {
+  document.querySelectorAll('.tab').forEach(x => x.classList.remove('on'));
+  e.currentTarget.classList.add('on');
+  const tab = e.currentTarget.dataset.tab;
+  ['summary','files','results','g-summary','g-files','g-results'].forEach(t => {
+    const el = document.getElementById('tab-' + t);
+    if (el) el.style.display = tab === t ? 'block' : 'none';
+  });
+}));
+$('save-draft').addEventListener('click', () => {
+  try {
+    const draft = { asset:$('f-asset').value, svc:$('f-svcname').value, method:method(), endpoint:$('f-endpoint').value, auth:$('f-auth').value, status:$('f-status').value, maxms:$('f-maxms').value, payload:$('f-payload').value, expected:$('f-expected').value, getbody:$('f-getbody').checked, headers, scenarios, env:$('f-env').value, endpointType:($('f-endpointtype')||{}).value, raml:($('f-raml')||{}).value };
+    localStorage.setItem('thub-studio-draft', JSON.stringify(draft));
+    $('save-draft').textContent = 'Saved ✓'; setTimeout(()=>$('save-draft').textContent='Save Draft', 1400);
+  } catch { toast('Draft could not be saved in this browser'); }
+});
+$('stub-back').addEventListener('click', () => { document.querySelectorAll('.rail-btn')[0].click(); });
+
+// ── UI Test Automation engine ──────────────────────────────────────────────
+(function initUiEngine() {
+  // The source markup has a pre-existing <div> imbalance: the browser's error
+  // correction ejects #module-api-preview out of #module-api, and anything
+  // authored after it lands OUTSIDE the rail's flex row. Rather than depend on
+  // that corrected shape, put #module-ui where it belongs, once, at startup.
+  // (Fixing the malformed HTML properly is tracked separately — an HTML
+  //  validity check belongs in CI.)
+  (function reparent() {
+    const api = $('module-api');
+    const row = api && api.parentElement;
+    if (!row) return;
+    // #module-stub is affected by the same imbalance — it was authored outside the
+    // row, so selecting a COMING SOON capability rendered the panel BELOW the rail
+    // at full width instead of beside it.
+    ['module-ui', 'module-sf', 'module-generic', 'module-stub'].forEach(id => {
+      const el = $(id);
+      if (el && el.parentElement !== row) row.appendChild(el);
+    });
+  })();
+
+  const UI_ACTIONS = ['fill', 'type', 'click', 'doubleClick', 'check', 'uncheck',
+                      'selectOption', 'hover', 'pressKey', 'clear', 'uploadFile'];
+  const NEEDS_VALUE = new Set(['fill', 'type', 'selectOption', 'uploadFile', 'pressKey']);
+  let steps = [
+    { action: 'fill',  locator: '', value: '', label: '' },
+    { action: 'click', locator: '', value: '', label: '' },
+  ];
+  let scn = { positive: true, negative: true };
+
+  function renderSteps() {
+    const host = $('u-steps');
+    host.innerHTML = '';
+    steps.forEach((s, i) => {
+      // Two lines per step: the form column is ~365px here, far too narrow for a
+      // five-column grid — a single row collapses the locator/value inputs to
+      // roughly 24px. Verified at 1280x720.
+      const row = document.createElement('div');
+      row.style.cssText = 'display:flex;flex-direction:column;gap:6px;padding:9px 10px;' +
+        'background:var(--panel);border:1px solid var(--border);border-radius:10px';
+      const opts = UI_ACTIONS.map(a => `<option value="${a}"${a === s.action ? ' selected' : ''}>${a}</option>`).join('');
+      const needsVal = NEEDS_VALUE.has(s.action);
+      row.innerHTML =
+        `<div style="display:grid;grid-template-columns:112px minmax(0,1fr) 26px;gap:6px;align-items:center">` +
+          `<select data-i="${i}" data-f="action" class="mono" style="font-size:12px">${opts}</select>` +
+          `<input data-i="${i}" data-f="locator" class="mono" placeholder="#username" value="${escAttr(s.locator)}" style="font-size:12px">` +
+          `<button data-del="${i}" class="btn" style="padding:5px 6px;font-size:12px;line-height:1">✕</button>` +
+        `</div>` +
+        `<div style="display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:6px">` +
+          `<input data-i="${i}" data-f="value" placeholder="${needsVal ? 'value' : 'no value needed'}" value="${escAttr(s.value)}" style="font-size:12px"${needsVal ? '' : ' disabled'}>` +
+          `<input data-i="${i}" data-f="label" placeholder="label (for scenario names)" value="${escAttr(s.label)}" style="font-size:12px">` +
+        `</div>`;
+      host.appendChild(row);
+    });
+    host.querySelectorAll('select,input').forEach(el => {
+      el.addEventListener('input', e => {
+        const t = e.currentTarget;
+        steps[+t.dataset.i][t.dataset.f] = t.value;
+        if (t.dataset.f === 'action') renderSteps();
+        refreshUi();
+      });
+    });
+    host.querySelectorAll('[data-del]').forEach(b => {
+      b.addEventListener('click', e => {
+        steps.splice(+e.currentTarget.dataset.del, 1);
+        renderSteps(); refreshUi();
+      });
+    });
+  }
+
+  function escAttr(v) { return String(v || '').replace(/"/g, '&quot;'); }
+  function esc(v) { return String(v == null ? '' : v).replace(/[&<>]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[c])); }
+
+  /** Mirrors engines/ui_playwright.py:build_matrix — the preview must equal
+   *  what the backend derives, or the "no black box" promise is hollow. */
+  function derive() {
+    const live = steps.filter(s => s.action);
+    const journey = $('u-journey').value.trim() || 'Journey';
+    const out = [];
+    if (scn.positive) out.push({ name: journey + ' — happy path', kind: 'positive' });
+    if (scn.negative) {
+      live.forEach((s, i) => {
+        if (s.action !== 'fill' && s.action !== 'type') return;
+        const label = s.label || s.locator || ('field ' + (i + 1));
+        out.push({ name: journey + ' — ' + label + ' empty', kind: 'negative' });
+        out.push({ name: journey + ' — ' + label + ' invalid', kind: 'negative' });
+      });
+    }
+    return out;
+  }
+
+  function checks() {
+    return [
+      { ok: !!$('u-asset').value.trim(), label: 'Asset name set' },
+      { ok: !!$('u-svc').value.trim(), label: 'Service name set' },
+      { ok: !!$('u-baseurl').value.trim(), label: 'Base URL set' },
+      { ok: !!$('u-success').value.trim(), label: 'Success locator set' },
+      { ok: steps.some(s => s.action && s.locator.trim()) || steps.some(s => s.action === 'pressKey'), label: 'At least one step' },
+      { ok: scn.positive || scn.negative, label: 'Scenario type selected' },
+    ];
+  }
+
+  function refreshUi() {
+    $('u-pos').classList.toggle('on', scn.positive);
+    $('u-neg').classList.toggle('on', scn.negative);
+    const rows = derive();
+    $('u-count').textContent = rows.length;
+    $('u-rows').innerHTML = rows.length ? rows.map(r =>
+      '<div class="file-row"><span class="badge" style="background:' +
+      (r.kind === 'positive' ? 'rgba(46,173,110,.14);color:var(--success-text)' : 'rgba(226,177,90,.14);color:var(--warn-text)') +
+      '">' + r.kind + '</span><span style="flex:1;font-size:12.5px">' + esc(r.name) + '</span></div>'
+    ).join('') : '<div class="hint" style="margin:0">Add a step to derive scenarios.</div>';
+
+    const cs = checks(), passed = cs.filter(c => c.ok).length, all = passed === cs.length;
+    $('u-generate').disabled = !all;
+    const chip = $('u-ready');
+    chip.textContent = all ? 'Ready · ' + rows.length + ' tests' : (cs.length - passed) + ' of ' + cs.length + ' checks remaining';
+    chip.style.cssText = 'padding:8px 12px;font-size:12.5px;font-weight:600;border-radius:8px;' + (all
+      ? 'background:rgba(46,173,110,.10);border:1px solid rgba(46,173,110,.32);color:var(--success-text)'
+      : 'background:rgba(226,177,90,.10);border:1px solid rgba(226,177,90,.32);color:var(--warn-text)');
+  }
+
+  ['u-asset', 'u-svc', 'u-journey', 'u-baseurl', 'u-success', 'u-title', 'u-url']
+    .forEach(id => $(id).addEventListener('input', refreshUi));
+  $('u-pos').addEventListener('click', () => { scn.positive = !scn.positive; refreshUi(); });
+  $('u-neg').addEventListener('click', () => { scn.negative = !scn.negative; refreshUi(); });
+  $('u-add-step').addEventListener('click', () => {
+    steps.push({ action: 'click', locator: '', value: '', label: '' });
+    renderSteps(); refreshUi();
+  });
+
+  $('u-generate').addEventListener('click', async () => {
+    const btn = $('u-generate');
+    btn.disabled = true; btn.textContent = 'Generating…';
+    try {
+      const r = await fetch('/api/generate', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          engine: 'ui',
+          assetName: $('u-asset').value.trim(),
+          serviceName: $('u-svc').value.trim(),
+          journeyName: $('u-journey').value.trim(),
+          baseUrl: $('u-baseurl').value.trim(),
+          successLocator: $('u-success').value.trim(),
+          expectTitle: $('u-title').value.trim(),
+          expectUrlContains: $('u-url').value.trim(),
+          positive: scn.positive, negative: scn.negative,
+          steps: steps.filter(s => s.action),
+          paths: { ...paths },
+        }),
+      });
+      const j = await r.json();
+      if (j.ok) {
+        toast(j.rows + ' UI scenarios written · ' + j.files.length + ' file(s)');
+        $('u-meta').textContent = 'Written ' + new Date().toLocaleTimeString('en-ZA', { hour: '2-digit', minute: '2-digit' });
+      } else {
+        toast('Generate failed: ' + (j.error || 'unknown error'));
+      }
+    } catch { toast('Backend not reachable — is app.py running?'); }
+    btn.disabled = false; btn.textContent = 'Generate UI Assets';
+    refreshUi();
+  });
+
+  renderSteps();
+  refreshUi();
+})();
+
+// ── Salesforce Test Automation engine ──────────────────────────────────────
+// Field lists and matrix rules mirror frontend/engines/salesforce.py, which in
+// turn mirrors the accelerator's own page objects. If those change, change both.
+(function initSfEngine() {
+  const OBJECTS = {
+    Contact: {
+      required: 'LastName', flow: 'create',
+      note: 'ContactPage.createContact() exists — emits a create + field-comparison flow, and a required-field-omitted negative.',
+      fields: ['FirstName','LastName','Email','Phone','MobilePhone','Title','Department',
+               'MailingStreet','MailingCity','MailingState','MailingPostalCode','MailingCountry'],
+    },
+    Account: {
+      required: 'Name', flow: 'verify',
+      note: 'AccountPage is navigate/read only — their framework has no Account create flow, so only a verify-existing-record test is emitted (no negative).',
+      fields: ['Name','Phone','Website','Industry','Type',
+               'BillingStreet','BillingCity','BillingState','BillingPostalCode','BillingCountry'],
+    },
+  };
+  let scn = { positive: true, negative: true };
+  const values = { Contact: {}, Account: {} };
+
+  const obj = () => $('s-object').value;
+  function esc(v) { return String(v == null ? '' : v).replace(/[&<>]/g, c => ({ '&':'&amp;','<':'&lt;','>':'&gt;' }[c])); }
+
+  function renderFields() {
+    const o = obj(), spec = OBJECTS[o], host = $('s-fields');
+    host.innerHTML = '';
+    spec.fields.forEach(f => {
+      const wrap = document.createElement('label');
+      const req = f === spec.required;
+      wrap.innerHTML = `<span class="lbl" style="font-size:11px">${f}${req ? ' <span class="req">*</span>' : ''}</span>` +
+        `<input data-f="${f}" class="mono" style="font-size:12px" value="${esc(values[o][f] || '')}">`;
+      host.appendChild(wrap);
+    });
+    host.querySelectorAll('input').forEach(el => el.addEventListener('input', e => {
+      values[obj()][e.currentTarget.dataset.f] = e.currentTarget.value;
+      refreshSf();
+    }));
+    $('s-flow-note').textContent = spec.note;
+  }
+
+  /** Mirrors SalesforceEngine.build_matrix. */
+  function derive() {
+    const o = obj(), spec = OBJECTS[o];
+    const filled = spec.fields.filter(f => (values[o][f] || '').trim() !== '');
+    if (!filled.length) return [];
+    const prefix = $('s-prefix').value.trim() || `TC_SF_${o}`;
+    const out = []; let n = 0;
+    if (scn.positive) {
+      n++;
+      out.push({ name: `${prefix}_${String(n).padStart(3,'0')} - ${spec.flow === 'create' ? 'Create' : 'Verify'} ${o} with multiple fields`, kind: 'positive' });
+    }
+    if (scn.negative && spec.flow === 'create' && filled.includes(spec.required) && filled.length > 1) {
+      n++;
+      out.push({ name: `${prefix}_${String(n).padStart(3,'0')} - Create ${o} without ${spec.required} is rejected`, kind: 'negative' });
+    }
+    return out;
+  }
+
+  function refreshSf() {
+    $('s-pos').classList.toggle('on', scn.positive);
+    $('s-neg').classList.toggle('on', scn.negative);
+    const o = obj(), spec = OBJECTS[o];
+    const rows = derive();
+    $('s-count').textContent = rows.length;
+    $('s-rows').innerHTML = rows.length ? rows.map(r =>
+      '<div class="file-row"><span class="badge" style="background:' +
+      (r.kind === 'positive' ? 'rgba(46,173,110,.14);color:var(--success-text)' : 'rgba(226,177,90,.14);color:var(--warn-text)') +
+      '">' + r.kind + '</span><span style="flex:1;font-size:12px;word-break:break-word">' + esc(r.name) + '</span></div>'
+    ).join('') : '<div class="hint" style="margin:0">Enter at least one field to derive scenarios.</div>';
+
+    const cs = [
+      { ok: !!$('s-asset').value.trim(), label: 'Asset name set' },
+      { ok: (values[o][spec.required] || '').trim() !== '', label: `${spec.required} set` },
+      { ok: rows.length > 0, label: 'At least one scenario' },
+    ];
+    const passed = cs.filter(c => c.ok).length, all = passed === cs.length;
+    $('s-generate').disabled = !all;
+    const chip = $('s-ready');
+    chip.textContent = all ? `Ready · ${rows.length} test${rows.length === 1 ? '' : 's'}`
+                           : `${cs.length - passed} of ${cs.length} checks remaining`;
+    chip.style.cssText = 'padding:8px 12px;font-size:12.5px;font-weight:600;border-radius:8px;' + (all
+      ? 'background:rgba(46,173,110,.10);border:1px solid rgba(46,173,110,.32);color:var(--success-text)'
+      : 'background:rgba(226,177,90,.10);border:1px solid rgba(226,177,90,.32);color:var(--warn-text)');
+  }
+
+  $('s-object').addEventListener('change', () => { renderFields(); refreshSf(); });
+  ['s-asset','s-prefix','s-suite','s-persona'].forEach(id => $(id).addEventListener('input', refreshSf));
+  $('s-pos').addEventListener('click', () => { scn.positive = !scn.positive; refreshSf(); });
+  $('s-neg').addEventListener('click', () => { scn.negative = !scn.negative; refreshSf(); });
+
+  $('s-generate').addEventListener('click', async () => {
+    const btn = $('s-generate'), o = obj();
+    btn.disabled = true; btn.textContent = 'Generating…';
+    try {
+      const fields = {};
+      OBJECTS[o].fields.forEach(f => { const v = (values[o][f] || '').trim(); if (v) fields[f] = v; });
+      const r = await fetch('/api/generate', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          engine: 'sf', sfObject: o,
+          assetName: $('s-asset').value.trim(),
+          suiteName: $('s-suite').value.trim(),
+          casePrefix: $('s-prefix').value.trim(),
+          persona: $('s-persona').value.trim(),
+          positive: scn.positive, negative: scn.negative,
+          fields,
+          // Sent relative so the backend resolves them against the repo root,
+          // not the Flask process CWD. sfDataRel stays relative on purpose — it
+          // is the literal baked into the spec's path.resolve(...).
+          paths: { ...paths },
+        }),
+      });
+      const j = await r.json();
+      if (j.ok) {
+        toast(j.rows + ' Salesforce scenarios written · ' + j.files.length + ' files');
+        $('s-meta').textContent = 'Written ' + new Date().toLocaleTimeString('en-ZA', { hour: '2-digit', minute: '2-digit' });
+      } else {
+        toast('Generate failed: ' + (j.error || 'unknown error'));
+      }
+    } catch { toast('Backend not reachable — is app.py running?'); }
+    btn.disabled = false; btn.textContent = 'Generate Salesforce Assets';
+    refreshSf();
+  });
+
+  renderFields();
+  refreshSf();
+})();
+
+// ── Generic schema-driven engine panel ─────────────────────────────────────
+// Mobile, Performance, Security, Agentforce and AI Agentic all render from the
+// schema their Python engine declares. Engine #8 needs no frontend code at all.
+//
+// The scenario list comes from POST /api/preview — i.e. the engine's own
+// build_matrix(). Re-deriving it in JS is how a preview silently stops matching
+// the generated output, which would make "never a black box" a lie.
+(function initGenericEngine() {
+  let CATALOG = {};
+  let current = null;
+  const state = {};                       // engineId -> { key: value }
+  const stepsState = {};                  // engineId -> [ {action,locator,value,label} ]
+  const rowsState = {};                   // engineId -> { fieldKey: [ {col: value} ] }
+  let previewTimer = null;
+
+  function esc(v) { return String(v == null ? '' : v).replace(/[&<>]/g, c => ({ '&':'&amp;','<':'&lt;','>':'&gt;' }[c])); }
+  function escAttr(v) { return String(v == null ? '' : v).replace(/"/g, '&quot;'); }
+
+  function controlFor(f, val) {
+    const id = `g_${f.key}`;
+    if (f.kind === 'select') {
+      const opts = (f.options || []).map(o => `<option value="${escAttr(o)}"${String(val) === String(o) ? ' selected' : ''}>${esc(o)}</option>`).join('');
+      return `<select id="${id}" data-k="${f.key}">${opts}</select>`;
+    }
+    if (f.kind === 'textarea') {
+      return `<textarea id="${id}" data-k="${f.key}" spellcheck="false" placeholder="${escAttr(f.placeholder)}" style="height:88px;font-family:'IBM Plex Mono',monospace;font-size:12.5px;resize:vertical">${esc(val)}</textarea>`;
+    }
+    return `<input id="${id}" data-k="${f.key}" class="mono" placeholder="${escAttr(f.placeholder)}" value="${escAttr(val)}" style="font-size:12.5px">`;
+  }
+
+  function renderSteps(engineId, f) {
+    const list = stepsState[engineId] || (stepsState[engineId] = [{ action: f.options[0], locator: '', value: '', label: '' }]);
+    const rows = list.map((s, i) => {
+      const opts = f.options.map(a => `<option value="${a}"${a === s.action ? ' selected' : ''}>${a}</option>`).join('');
+      return `<div style="display:flex;flex-direction:column;gap:6px;padding:9px 10px;background:var(--panel);border:1px solid var(--border);border-radius:10px">
+        <div style="display:grid;grid-template-columns:132px minmax(0,1fr) 26px;gap:6px;align-items:center">
+          <select data-si="${i}" data-sf="action" class="mono" style="font-size:12px">${opts}</select>
+          <input data-si="${i}" data-sf="locator" class="mono" placeholder="~accessibility-id" value="${escAttr(s.locator)}" style="font-size:12px">
+          <button data-sdel="${i}" class="btn" style="padding:5px 6px;font-size:12px;line-height:1">✕</button>
+        </div>
+        <div style="display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:6px">
+          <input data-si="${i}" data-sf="value" placeholder="value" value="${escAttr(s.value)}" style="font-size:12px">
+          <input data-si="${i}" data-sf="label" placeholder="label" value="${escAttr(s.label)}" style="font-size:12px">
+        </div></div>`;
+    }).join('');
+    return `<div id="g-steps" style="display:flex;flex-direction:column;gap:7px">${rows}</div>
+            <button class="btn" id="g-add-step" style="margin-top:10px;font-size:12px;padding:7px 12px">+ Add step</button>`;
+  }
+
+  function renderRows(engineId, f) {
+    // A generic repeatable group. NOT a widening of renderSteps: that one is
+    // hardcoded to the mobile shape (action/locator/value/label, action from a
+    // select) and payload() finds it with find(kind==='steps') — singular. Two
+    // free-text columns do not justify putting the mobile asset shape at risk.
+    const cols = f.options || [];
+    const bag = rowsState[engineId] || (rowsState[engineId] = {});
+    const list = bag[f.key] || (bag[f.key] = [Object.fromEntries(cols.map(c => [c, '']))]);
+    const grid = 'grid-template-columns:' + cols.map(() => 'minmax(0,1fr)').join(' ') + ' 26px';
+    const rows = list.map((r, i) => {
+      const cells = cols.map(c =>
+        `<input data-ri="${i}" data-rk="${f.key}" data-rc="${c}" class="mono" placeholder="${escAttr(c)}"
+                value="${escAttr(r[c])}" style="font-size:12px">`).join('');
+      return `<div style="display:grid;${grid};gap:6px;align-items:center">${cells}
+        <button data-rdel="${i}" data-rk="${f.key}" class="btn"
+                style="padding:5px 6px;font-size:12px;line-height:1">&#10005;</button></div>`;
+    }).join('');
+    const head = cols.map(c => `<span class="lbl" style="margin:0">${esc(c)}</span>`).join('') + '<span></span>';
+    return `<div style="display:grid;${grid};gap:6px;margin-bottom:7px">${head}</div>
+            <div style="display:flex;flex-direction:column;gap:7px">${rows}</div>
+            <button class="btn" data-radd="${f.key}" style="margin-top:10px;font-size:12px;padding:7px 12px">+ Add</button>`;
+  }
+
+  function mount(engineId) {
+    const eng = CATALOG[engineId];
+    if (!eng) return;
+    current = engineId;
+    state[engineId] = state[engineId] || {};
+    const vals = state[engineId];
+
+    $('g-title').textContent = eng.title;
+    const badge = $('g-badge');
+    badge.textContent = eng.canExecute ? 'LIVE' : 'ASSETS ONLY';
+    badge.style.cssText = eng.canExecute
+      ? 'color:var(--success-text);background:rgba(46,173,110,.12);border:1px solid rgba(46,173,110,.3)'
+      : 'color:var(--warn-text);background:rgba(226,177,90,.12);border:1px solid rgba(226,177,90,.32)';
+
+    const reason = $('g-reason');
+    reason.innerHTML = `<span style="color:var(--text-4)"><b style="color:${eng.canExecute ? 'var(--success-text)' : 'var(--warn-text)'}">${eng.canExecute ? 'Runnable here.' : 'Assets only.'}</b> ${esc(eng.reason)}</span>`;
+    reason.style.background = eng.canExecute ? 'rgba(46,173,110,.06)' : 'rgba(226,177,90,.06)';
+    reason.style.border = '1px solid ' + (eng.canExecute ? 'rgba(46,173,110,.2)' : 'rgba(226,177,90,.2)');
+
+    $('g-form').innerHTML = eng.schema.map(sec => {
+      const fields = sec.fields.map(f => {
+        if (f.kind === 'steps') return `<div style="grid-column:span 2">${renderSteps(engineId, f)}<div class="hint" style="margin-top:8px">${esc(f.hint)}</div></div>`;
+        if (f.kind === 'rows') return `<div style="grid-column:span 2">${renderRows(engineId, f)}<div class="hint" style="margin-top:8px">${esc(f.hint)}</div></div>`;
+        if (f.kind === 'toggle') {
+          if (vals[f.key] === undefined) vals[f.key] = f.default !== 'off';
+          return `<button class="scn-card${vals[f.key] ? ' on' : ''}" data-tk="${f.key}" style="grid-column:span 1">
+            <span class="scn-box"></span><span style="flex:1;min-width:0"><span style="display:block;font-size:13px;font-weight:700">${esc(f.label)}</span></span></button>`;
+        }
+        if (vals[f.key] === undefined) vals[f.key] = f.default || '';
+        const span = f.width === 'full' ? 'grid-column:span 2' : '';
+        return `<label style="${span}"><span class="lbl">${esc(f.label)}${f.required ? ' <span class="req">*</span>' : ''}</span>
+          ${controlFor(f, vals[f.key])}${f.hint ? `<span class="hint" style="margin-top:5px">${esc(f.hint)}</span>` : ''}</label>`;
+      }).join('');
+      return `<section class="card"><div class="card-title">${esc(sec.title)}</div><div class="sec-body">
+        <div style="display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:11px">${fields}</div>
+        ${sec.note ? `<div class="hint" style="margin-top:10px">${esc(sec.note)}</div>` : ''}</div></section>`;
+    }).join('');
+
+    wire(engineId);
+    schedulePreview();
+  }
+
+  function wire(engineId) {
+    const vals = state[engineId];
+    $('g-form').querySelectorAll('[data-k]').forEach(el => {
+      const ev = el.tagName === 'SELECT' ? 'change' : 'input';
+      el.addEventListener(ev, e => { vals[e.currentTarget.dataset.k] = e.currentTarget.value; schedulePreview(); });
+    });
+    $('g-form').querySelectorAll('[data-tk]').forEach(btn => {
+      btn.addEventListener('click', e => {
+        const k = e.currentTarget.dataset.tk;
+        vals[k] = !vals[k];
+        e.currentTarget.classList.toggle('on', vals[k]);
+        schedulePreview();
+      });
+    });
+    const bag = rowsState[engineId];
+    if (bag) {
+      const colsOf = k => (CATALOG[engineId].schema.flatMap(sec => sec.fields)
+                            .find(x => x.key === k) || {}).options || [];
+      $('g-form').querySelectorAll('[data-ri]').forEach(el => {
+        el.addEventListener('input', e => {
+          const t = e.currentTarget;
+          bag[t.dataset.rk][+t.dataset.ri][t.dataset.rc] = t.value;
+          schedulePreview();
+        });
+      });
+      $('g-form').querySelectorAll('[data-rdel]').forEach(b => b.addEventListener('click', e => {
+        const t = e.currentTarget, l = bag[t.dataset.rk];
+        l.splice(+t.dataset.rdel, 1);
+        // Never leave zero rows: an empty group reads as a broken form rather
+        // than an empty list, and leaves nothing to type into.
+        if (!l.length) l.push(Object.fromEntries(colsOf(t.dataset.rk).map(c => [c, ''])));
+        mount(engineId);
+      }));
+      $('g-form').querySelectorAll('[data-radd]').forEach(b => b.addEventListener('click', e => {
+        const k = e.currentTarget.dataset.radd;
+        bag[k].push(Object.fromEntries(colsOf(k).map(c => [c, ''])));
+        mount(engineId);
+      }));
+    }
+
+    const list = stepsState[engineId];
+    if (list) {
+      $('g-form').querySelectorAll('[data-si]').forEach(el => {
+        el.addEventListener('input', e => {
+          const t = e.currentTarget;
+          list[+t.dataset.si][t.dataset.sf] = t.value;
+          if (t.dataset.sf === 'action') mount(engineId);
+          schedulePreview();
+        });
+      });
+      $('g-form').querySelectorAll('[data-sdel]').forEach(b => b.addEventListener('click', e => {
+        list.splice(+e.currentTarget.dataset.sdel, 1); mount(engineId);
+      }));
+      const add = $('g-add-step');
+      if (add) add.addEventListener('click', () => {
+        const f = CATALOG[engineId].schema.flatMap(s => s.fields).find(x => x.kind === 'steps');
+        list.push({ action: f.options[0], locator: '', value: '', label: '' });
+        mount(engineId);
+      });
+    }
+  }
+
+  function payload() {
+    const eng = CATALOG[current];
+    const body = { engine: current, paths: { ...paths }, ...state[current] };
+    const stepField = eng.schema.flatMap(s => s.fields).find(f => f.kind === 'steps');
+    if (stepField) body[stepField.key] = (stepsState[current] || []).filter(s => s.action);
+    // ALL row-groups, by key. The steps lookup above is singular by design and
+    // this must not inherit that limit.
+    eng.schema.flatMap(s => s.fields).filter(f => f.kind === 'rows').forEach(f => {
+      body[f.key] = ((rowsState[current] || {})[f.key] || [])
+        .filter(r => (f.options || []).some(c => String(r[c] || '').trim()));
+    });
+    return body;
+  }
+
+  function schedulePreview() {
+    clearTimeout(previewTimer);
+    previewTimer = setTimeout(runPreview, 220);
+  }
+
+  async function runPreview() {
+    if (!current) return;
+    let j;
+    try {
+      const r = await fetch('/api/preview', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload()),
+      });
+      j = await r.json();
+    } catch { return; }
+    if (!j.ok) return;
+    const rows = j.rows || [];
+    // The perf engine's threshold rows (p95 duration, error rate) are gate
+    // config, not scenarios — Derived Scenarios shows what will run, so only
+    // the positive row belongs here. Other kinds are unaffected.
+    const visibleRows = current === 'perf' ? rows.filter(r => r.kind === 'positive') : rows;
+    $('g-count').textContent = visibleRows.length;
+    const colour = k => k === 'positive' ? 'rgba(46,173,110,.14);color:var(--success-text)'
+      : k === 'negative' ? 'rgba(226,177,90,.14);color:var(--warn-text)'
+      : k === 'threshold' ? 'rgba(90,166,245,.14);color:#7FB4F5'
+      : 'var(--fill-2);color:var(--muted)';
+    $('g-rows').innerHTML = visibleRows.length
+      ? visibleRows.map(r => `<div class="file-row" style="align-items:flex-start">
+          <span class="badge" style="background:${colour(r.kind)}">${esc(r.kind)}</span>
+          <span style="flex:1;min-width:0"><span style="display:block;font-size:12.5px;word-break:break-word">${esc(r.name)}</span>
+          ${r.detail ? `<span style="display:block;font-size:11.5px;color:var(--muted);margin-top:2px;word-break:break-word">${esc(r.detail)}</span>` : ''}</span></div>`).join('')
+      : `<div class="hint" style="margin:0">${esc(j.blocked || 'Complete the form to derive scenarios.')}</div>`;
+
+    const ok = rows.length > 0;
+    const isAfc = current === 'afc';
+    $('g-generate').style.display = isAfc ? 'none' : '';
+    ['afc-update', 'afc-run-sel', 'afc-run-all'].forEach(id => {
+      $(id).style.display = isAfc ? '' : 'none';
+    });
+    $('afc-update').disabled = !ok;
+    $('g-generate').disabled = !ok;
+    const chip = $('g-ready');
+    chip.textContent = ok ? `Ready · ${rows.length} scenario${rows.length === 1 ? '' : 's'}` : (j.blocked || 'Not ready yet');
+    chip.style.cssText = 'padding:8px 12px;font-size:12.5px;font-weight:600;border-radius:8px;' + (ok
+      ? 'background:rgba(46,173,110,.10);border:1px solid rgba(46,173,110,.32);color:var(--success-text)'
+      : 'background:rgba(226,177,90,.10);border:1px solid rgba(226,177,90,.32);color:var(--warn-text)');
+  }
+
+  $('g-generate').addEventListener('click', async () => {
+    const btn = $('g-generate');
+    btn.disabled = true; btn.textContent = 'Generating…';
+    try {
+      const r = await fetch('/api/generate', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload()),
+      });
+      const j = await r.json();
+      if (j.ok) {
+        toast(`${j.rows} scenarios written · ${j.files.length} file(s)`);
+        $('g-meta').textContent = 'Written ' + new Date().toLocaleTimeString('en-ZA', { hour: '2-digit', minute: '2-digit' });
+      } else { toast('Generate failed: ' + (j.error || 'unknown error')); }
+    } catch { toast('Backend not reachable — is app.py running?'); }
+    btn.textContent = 'Generate Assets';
+    runPreview();
+  });
+
+  // ── Agentforce Configuration actions (MoM points 3-5) ─────────────────────
+  // Update edits agentforce.config.ts in the framework repo; the run buttons
+  // drive that repo's own suite. Both refuse loudly rather than half-working:
+  // the backend is the one that decides, and its reason is shown verbatim.
+  async function afcPost(url, body) {
+    const r = await fetch(url, {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body),
+    });
+    return { status: r.status, body: await r.json() };
+  }
+
+  function afcBody() {
+    const p = payload();
+    return { frameworkRoot: p.frameworkRoot || '', environment: p.environment || 'QA',
+             suites: p.suites || [] };
+  }
+
+  $('afc-update').addEventListener('click', async () => {
+    const btn = $('afc-update');
+    btn.disabled = true; btn.textContent = 'Updating…';
+    try {
+      const { body: j } = await afcPost('/api/agentforce/config', afcBody());
+      if (!j.ok) { toast('Update failed: ' + (j.error || 'unknown error')); }
+      else if (!j.changed) { toast('Already up to date — nothing to change'); }
+      else {
+        const r = j.report || {};
+        const bits = [];
+        if ((r.added || []).length) bits.push(`${r.added.length} appended`);
+        if ((r.updated || []).length) bits.push(`${r.updated.length} updated`);
+        if ((r.unchanged || []).length) bits.push(`${r.unchanged.length} left alone`);
+        toast('agentforce.config.ts · ' + (bits.join(' · ') || 'written'));
+        $('g-meta').textContent = 'Config updated ' + new Date().toLocaleTimeString('en-ZA', { hour: '2-digit', minute: '2-digit' });
+      }
+    } catch { toast('Backend not reachable — is app.py running?'); }
+    btn.textContent = 'Update Config'; btn.disabled = false;
+  });
+
+  async function afcRun(all) {
+    const base = afcBody();
+    let keys = (base.suites || []).map(s => s.key).filter(Boolean);
+    if (all) {
+      // Run All means every key the FILE declares, not just the ones typed into
+      // this form — the file is the source of truth for what exists.
+      try {
+        const r = await fetch('/api/agentforce/config?root=' + encodeURIComponent(base.frameworkRoot));
+        const j = await r.json();
+        if (j.ok) keys = j.suites.map(s => s.key);
+        else { toast('Cannot read config: ' + (j.error || 'unknown error')); return; }
+      } catch { toast('Backend not reachable — is app.py running?'); return; }
+    }
+    const { body: j } = await afcPost('/api/agentforce/run', { ...base, keys });
+    if (j.ok) { toast(`Running ${keys.length} suite(s) on ${base.environment}`); return; }
+    // A pending command is not an error the user caused. Say whose it is.
+    toast(j.error || 'Run failed');
+  }
+
+  $('afc-run-sel').addEventListener('click', () => afcRun(false));
+  $('afc-run-all').addEventListener('click', () => afcRun(true));
+
+  // The catalogue arrives asynchronously, and its preflights shell out (sf org
+  // list, mobilecli devices) so it can take many seconds on a machine that has
+  // those CLIs. A click on a schema-driven module before it lands used to mount
+  // nothing and never retry — a blank Performance panel with no message, which
+  // is exactly what a Windows user with the Salesforce CLI installed saw on a
+  // 6 Sep call. Remember what was asked for and mount it when the data arrives;
+  // if the fetch fails, say so in the panel instead of drawing nothing.
+  let pendingMount = null, catalogState = 'loading';
+  const catalogNote = (html) => { const f = $('g-form'); if (f) f.innerHTML = html; };
+  window.__mountEngine = id => {
+    if (CATALOG[id]) { mount(id); return; }
+    pendingMount = id;
+    if (catalogState === 'loading') {
+      catalogNote('<div style="padding:18px;color:var(--muted);font-size:13px">Loading the engine catalogue from <code>/api/engines</code>… its preflights check for local CLIs, which can take a few seconds.</div>');
+    } else {
+      catalogNote('<div style="padding:18px;color:var(--warn-text);font-size:13px">The engine catalogue loaded but has no <code>' + esc(id) + '</code> entry. Open <code>/api/engines</code> in a tab to see what the backend registered.</div>');
+    }
+  };
+
+  fetch('/api/engines').then(r => {
+    if (!r.ok) throw new Error('HTTP ' + r.status + ' from /api/engines');
+    return r.json();
+  }).then(j => {
+    (j.engines || []).forEach(e => { CATALOG[e.id] = e; });
+    catalogState = 'ready';
+    if (pendingMount) { const id = pendingMount; pendingMount = null; window.__mountEngine(id); }
+  }).catch(err => {
+    catalogState = 'failed';
+    console.error('engine catalogue failed', err);
+    if (pendingMount) {
+      catalogNote('<div style="padding:18px;color:var(--danger-text,#F87171);font-size:13px"><b>The engine catalogue could not be loaded.</b> ' + esc(String(err && err.message || err)) + '<br><br>Open <code>' + esc(location.origin) + '/api/engines</code> in a new tab: the response names the engine that failed. Then reload this page.</div>');
+    }
+  });
+
+  // ── Generated Assets: Framework Monitor + live runner, same shape as the API
+  // module's (#tab-files / initRunner()) but scoped to whatever the mounted
+  // generic engine actually produces. /api/tests and /api/run already discover
+  // and execute k6 / k6-accelerator assets (runner.py's ASSET_KINDS) — this is
+  // just the UI those endpoints were missing here.
+  (function initGenericRunner() {
+    const host = $('tab-g-files');
+    if (!host) return;
+    host.innerHTML = `
+      <div style="display:flex;flex-direction:column;height:calc(100vh - 240px);min-height:560px;gap:10px">
+        <div style="display:flex;align-items:center;gap:9px">
+          <span style="font-size:12.5px;font-weight:700;color:var(--text-hi)">Framework Monitor</span>
+          <span class="hint" style="margin:0">watching <span class="mono" id="g-run-watch"></span></span>
+          <span style="flex:1"></span>
+          <button class="btn" id="g-run-refresh" style="font-size:12px;padding:6px 11px">↻ Refresh</button>
+        </div>
+        <div id="g-run-tree" class="scroll" style="flex:none;max-height:150px;overflow-y:auto;display:flex;flex-direction:column;gap:6px"></div>
+        <div id="g-run-term" class="scroll mono" style="flex:1;min-height:420px;overflow-y:auto;overflow-x:hidden;background:#04070C;border:1px solid var(--border-3);border-radius:12px;padding:12px 14px;font-size:12px;line-height:1.65;white-space:pre-wrap;overflow-wrap:anywhere;word-break:break-word;color:#C9D3E0">
+<span style="color:var(--muted)">TestHub Runner — select a generated test above, then Execute Tests.
+Output streams here live.</span></div>
+        <div style="display:flex;align-items:center;gap:10px">
+          <span class="hint" style="margin:0">Environment: <b class="mono" id="g-run-env"></b> · selected: <span class="mono" id="g-run-sel" style="color:var(--accent-text)">none</span></span>
+          <span style="flex:1"></span>
+          <button class="btn" id="g-run-stop" style="display:none;color:var(--danger)">■ Stop</button>
+          <button class="btn primary" id="g-run-exec" disabled>▶ Execute Tests</button>
+        </div>
+      </div>`;
+
+    let selected = null, currentRun = null, es = null;
+    const term = $('g-run-term');
+    const write = (line, color) => {
+      const s = document.createElement('span');
+      if (color) s.style.color = color;
+      if (!color) {
+        if (/✓|passed/i.test(line)) s.style.color = '#4FD98C';
+        else if (/✘|✗|failed|Error|error:/i.test(line)) s.style.color = '#F0483E';
+        else if (/^\$ /.test(line)) s.style.color = 'var(--accent-text)';
+        else if (/warning/i.test(line)) s.style.color = 'var(--warn-text)';
+      }
+      s.textContent = line + '\n';
+      term.appendChild(s);
+      term.scrollTop = term.scrollHeight;
+    };
+
+    // Only the kinds a live generic engine actually produces — today that's the
+    // k6 framework export and the plain k6 script (runner.py's ASSET_KINDS).
+    // A future generic engine (mobile, security, …) only needs its kind added
+    // here; the backend already returns kind/kindLabel per asset.
+    const RELEVANT_KINDS = new Set(['k6', 'k6-accelerator']);
+
+    async function loadTree() {
+      // `spec` is deliberately the API accelerator's Test Script path, not
+      // paths.perfFramework. repo_root_from_spec() only recognises a
+      // '.../src/tests' shape, so handing it paths.perfFramework here would
+      // make it resolve "root" one level too high (the Studio root) whenever
+      // the perf path doesn't happen to match that shape — a perf test file
+      // then reads as relative to that wrong root instead of falling outside
+      // it, /api/run's cwd walk-up (_project_root_for) never triggers for a
+      // relative path, and the run executes `npm run <slug>:<profile>` from
+      // the API accelerator instead of the performance one. `perf` is passed
+      // separately below and used as-is (list_assets searches it directly),
+      // so this stays correct regardless of where the perf accelerator lives.
+      const spec = cleanPath(paths.spec);
+      // Never empty: a missing perf path would make /api/tests fall back to the
+      // API-only scope, which (by design) lists no performance assets.
+      const perf = cleanPath(paths.perfFramework) || DEFAULT_PATHS.perfFramework;
+      $('g-run-watch').textContent = perf + '/tests';
+      $('g-run-env').textContent = $('f-env').value;
+      try {
+        const qs = 'spec=' + encodeURIComponent(spec) + '&perf=' + encodeURIComponent(perf);
+        const j = await (await fetch('/api/tests?' + qs)).json();
+        if (!j.ok) { $('g-run-tree').innerHTML = '<div class="hint">' + (j.error||'Could not read framework paths') + '</div>'; return; }
+        const assets = (j.assets || [])
+          .map(a => ({ asset: a.asset, tests: (a.tests || []).filter(t => RELEVANT_KINDS.has(t.kind)) }))
+          .filter(a => a.tests.length);
+        if (!assets.length) { $('g-run-tree').innerHTML = '<div class="hint">No generated performance tests found yet — generate assets first, then ↻ Refresh.</div>'; return; }
+        $('g-run-tree').innerHTML = assets.map(a =>
+          '<div style="background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:9px 12px">'
+          + '<div style="font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-bottom:6px">' + esc(a.asset) + '</div>'
+          + a.tests.map(t => '<label style="display:flex;align-items:center;gap:8px;width:auto;padding:3px 0;cursor:pointer">'
+            + '<input type="radio" name="g-run-pick" style="width:auto" data-rel="' + escAttr(t.rel) + '" data-name="' + escAttr(t.name) + '">'
+            + '<span class="mono" style="font-size:12.5px;color:var(--text-2)">' + esc(t.name) + '</span>'
+            + '<span class="chip mono" style="background:rgba(76,158,240,.12);color:#5AA6F5">' + esc(t.kindLabel) + '</span></label>').join('')
+          + '</div>').join('');
+        $('g-run-tree').querySelectorAll('input[name="g-run-pick"]').forEach(r => r.addEventListener('change', e => {
+          selected = { rel: e.target.dataset.rel, name: e.target.dataset.name };
+          $('g-run-sel').textContent = selected.name;
+          $('g-run-exec').disabled = false;
+        }));
+      } catch { $('g-run-tree').innerHTML = '<div class="hint">Backend not reachable.</div>'; }
+    }
+
+    $('g-run-refresh').addEventListener('click', loadTree);
+    // Refresh the Framework Monitor each time the Generated Assets tab is
+    // opened, so newly generated files show up without a manual ↻ Refresh.
+    const filesTabBtn = document.querySelector('[data-tab="g-files"]');
+    if (filesTabBtn) filesTabBtn.addEventListener('click', loadTree);
+    $('f-env').addEventListener('change', () => { $('g-run-env').textContent = $('f-env').value; });
+
+    $('g-run-exec').addEventListener('click', async () => {
+      if (!selected) return;
+      term.innerHTML = '';
+      $('g-run-exec').disabled = true; $('g-run-stop').style.display = 'inline-flex';
+      const j = await (await fetch('/api/run', { method:'POST', headers:{'Content-Type':'application/json'},
+        body: JSON.stringify({ rel: selected.rel, environment: $('f-env').value }) })).json();
+      if (!j.ok) { write('[runner] ' + (j.error||'failed to start'), '#F0483E'); $('g-run-exec').disabled = false; $('g-run-stop').style.display='none'; return; }
+      currentRun = j.runId;
+      es = new EventSource('/api/run/' + currentRun + '/stream');
+      let runStats = { passed: null, failed: null };
+      es.onmessage = e => { try {
+        const line = JSON.parse(e.data).line; write(line);
+        const mp = /(\d+)\s+passed/i.exec(line); if (mp) runStats.passed = +mp[1];
+        const mf = /(\d+)\s+failed/i.exec(line); if (mf) runStats.failed = +mf[1];
+      } catch {} };
+      es.addEventListener('end', e => {
+        let code = -1, report = null, reportLabel = 'Report';
+        try {
+          const d = JSON.parse(e.data);
+          code = d.exit; report = d.report; reportLabel = d.reportLabel || reportLabel;
+        } catch {}
+        write('');
+        write(code === 0 ? '── All tests completed · exit 0 ──' : '── Run finished · exit ' + code + ' ──',
+              code === 0 ? '#4FD98C' : '#F0483E');
+        const rv = $('g-results-view'), re = $('g-results-empty');
+        if (report) {
+          const reportUrl = '/api/report?' + new URLSearchParams({ path: report }).toString();
+          const frame = $('g-results-frame');
+          if (frame) frame.src = reportUrl;
+          const verdict = $('g-results-verdict');
+          if (verdict) {
+            const ok = code === 0;
+            verdict.textContent = ok ? 'PASS' : 'FAIL';
+            verdict.style.background = ok ? 'rgba(46,173,110,.16)' : 'rgba(240,72,62,.16)';
+            verdict.style.color = ok ? 'var(--success-text)' : '#F0483E';
+          }
+          const sum = $('g-results-summary');
+          if (sum) {
+            const bits = [];
+            if (runStats.passed != null) bits.push(runStats.passed + ' passed');
+            if (runStats.failed != null) bits.push(runStats.failed + ' failed');
+            sum.textContent = (bits.join(' · ') || (reportLabel + ' report')) + ' · exit ' + code;
+          }
+          const nm = $('g-results-name');
+          if (nm) nm.textContent = report.split('/').pop();
+          const fsEl = $('g-results-fullscreen');
+          if (fsEl) { fsEl.href = reportUrl; fsEl.target = '_blank'; fsEl.rel = 'noopener'; }
+          if (rv) rv.style.display = 'flex';
+          if (re) re.style.display = 'none';
+          const rtab = document.querySelector('[data-tab="g-results"]');
+          if (rtab) rtab.click();
+          write(reportLabel + ' results are in the View Results tab.', '#7F9CC4');
+        } else {
+          if (rv) rv.style.display = 'none';
+          if (re) re.style.display = 'flex';
+          write('This run produced no ' + reportLabel + ' report.', 'var(--warn-text)');
+        }
+        es.close(); es = null; currentRun = null;
+        $('g-run-exec').disabled = false; $('g-run-stop').style.display = 'none';
+      });
+      es.onerror = () => { if (es) { write('[runner] stream interrupted', 'var(--warn-text)'); es.close(); es=null; $('g-run-exec').disabled=false; $('g-run-stop').style.display='none'; } };
+    });
+
+    $('g-run-stop').addEventListener('click', async () => {
+      if (!currentRun) return;
+      await fetch('/api/run/' + currentRun + '/stop', { method: 'POST' });
+      write('[runner] stop requested', 'var(--warn-text)');
+    });
+
+    loadTree();
+  })();
+})();
+
+// restore draft
+try {
+  const d = JSON.parse(localStorage.getItem('thub-studio-draft') || 'null');
+  if (d) {
+    $('f-asset').value=d.asset||''; $('f-svcname').value=d.svc||''; $('f-method').value=d.method||'GET';
+    $('f-endpoint').value=d.endpoint||''; $('f-auth').value=d.auth||''; $('f-status').value=d.status||'200';
+    $('f-maxms').value=d.maxms||''; $('f-payload').value=d.payload||''; $('f-expected').value=d.expected||'';
+    $('f-getbody').checked=!!d.getbody; if (Array.isArray(d.headers)) headers=d.headers;
+    if (d.scenarios) scenarios=d.scenarios; if (d.env) $('f-env').value=d.env;
+    if ($('f-endpointtype') && d.endpointType) $('f-endpointtype').value=d.endpointType;
+    if ($('f-raml') && d.raml) $('f-raml').value=d.raml;
+  }
+} catch {}
+
+renderRail(); renderHeaders(); syncJsonFromTable(); refresh();
+
+// ── Section collapse/expand (dropdown pattern) — restored ──
+// Versioned key so any stale/broken state from earlier builds is discarded.
+let secState = {};
+try { secState = JSON.parse(localStorage.getItem('thub-studio-sections-v2') || '{}'); } catch {}
+document.querySelectorAll('.sec-toggle').forEach(btn => {
+  const card = btn.closest('section.card'); const key = btn.dataset.sec;
+  if (!card || !key) return;
+  if (secState[key]) card.classList.add('collapsed');
+  btn.addEventListener('click', e => {
+    e.stopPropagation();
+    card.classList.toggle('collapsed');
+    secState[key] = card.classList.contains('collapsed');
+    try { localStorage.setItem('thub-studio-sections-v2', JSON.stringify(secState)); } catch {}
+  });
+});
+
+// ── Paths popup — permanent until the user saves again ──
+function fillPathsForm() {
+  $('p-request').value = paths.request;
+  $('p-spec').value = paths.spec;
+  $('p-excel').value = paths.excel;
+  $('p-response').value = paths.response;
+  if ($('p-raml')) $('p-raml').value = paths.raml;
+  FRAMEWORK_PATH_KEYS.forEach(k => { const el = $('p-' + k); if (el) el.value = paths[k] || DEFAULT_PATHS[k]; });
+}
+function refreshPathHints() { const el = document.getElementById('hint-req-path'); if (el) el.textContent = cleanPath(paths.request) + '/'; const rp = document.getElementById('hint-raml-path'); if (rp) rp.textContent = cleanPath(paths.raml) + '/<asset>/'; }
+$('btn-paths').addEventListener('click', () => { fillPathsForm(); $('paths-overlay').classList.add('open'); });
+$('paths-close').addEventListener('click', () => $('paths-overlay').classList.remove('open'));
+$('paths-overlay').addEventListener('click', e => { if (e.target === $('paths-overlay')) $('paths-overlay').classList.remove('open'); });
+$('paths-save').addEventListener('click', () => {
+  paths = {
+    raml:     cleanPath(($('p-raml')||{}).value) || DEFAULT_PATHS.raml,
+    request:  cleanPath($('p-request').value)  || DEFAULT_PATHS.request,
+    spec:     cleanPath($('p-spec').value) || DEFAULT_PATHS.spec,
+    excel:    cleanPath($('p-excel').value)     || DEFAULT_PATHS.excel,
+    response: cleanPath($('p-response').value)  || DEFAULT_PATHS.response,
+  };
+  FRAMEWORK_PATH_KEYS.forEach(k => { const el = $('p-' + k); paths[k] = cleanPath(el ? el.value : '') || DEFAULT_PATHS[k]; });
+  try { localStorage.setItem('thub-studio-paths-v3', JSON.stringify(paths)); } catch {}
+  $('paths-overlay').classList.remove('open');
+  refreshPathHints(); refresh();
+  toast('Paths saved — applied to every future pack');
+});
+refreshPathHints();
+// ── Backend bridge — TestHub Python backend ─────────────────────────────
+// Reroutes Save Draft / Generate to the Flask API so assets are written
+// directly into the configured repo paths (no browser zip needed).
+(function () {
+  const API = '';
+
+  function collectForm() {
+    return {
+      assetName: $('f-asset').value.trim(),
+      serviceName: $('f-svcname').value.trim(),
+      method: method(),
+      endpoint: $('f-endpoint').value.trim(),
+      authType: $('f-auth').value || 'apikey',
+      environment: $('f-env').value,
+      endpointType: ($('f-endpointtype')||{}).value || undefined,
+      bodyFormat: bodyFmt(),
+      headers: headersObj(),
+      requestPayload: bodyFmt() === 'FORM' || bodyFmt() === 'URLENCODED'
+        ? JSON.stringify(formPayloadObject())
+        : bodyFmt() === 'BINARY'
+          ? ($('f-binary') ? $('f-binary').value : '')
+          : bodyFmt() === 'MFT'
+            ? JSON.stringify(mftPayloadObject())
+            : $('f-payload').value,
+      formFields: bodyFmt() === 'FORM' || bodyFmt() === 'URLENCODED' ? formPayloadObject() : undefined,
+      mftFields: bodyFmt() === 'MFT' ? mftPayloadObject() : undefined,
+      expectedStatus: ($('f-status').value || '').trim(),
+      maxResponseMs: ($('f-maxms').value || '').trim(),
+      expectedResponse: $('f-expected').value,
+      getBody: $('f-getbody').checked,
+      positive: scenarios.positive,
+      negative: scenarios.negative,
+      raml: ($('f-raml') || {}).value || undefined,
+      paths: { ...paths },
+    };
+  }
+
+  function rewire(id, handler) {
+    const old = $(id);
+    const fresh = old.cloneNode(true);        // drops the original zip/localStorage listeners
+    old.parentNode.replaceChild(fresh, old);
+    fresh.addEventListener('click', handler);
+    return fresh;
+  }
+
+  const saveBtn = rewire('save-draft', async () => {
+    try {
+      const r = await fetch(API + '/api/draft', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(collectForm()),
+      });
+      const j = await r.json();
+      saveBtn.textContent = j.ok ? 'Saved ✓' : 'Save failed';
+      setTimeout(() => saveBtn.textContent = 'Save Draft', 1400);
+    } catch { toast('Backend not reachable — is app.py running?'); }
+  });
+
+  // Clear Draft: empty every API form field and delete BOTH saved copies of the
+  // draft (browser + server), otherwise the restore-on-load brings them back and
+  // /api/generate would fall back to the server draft. Paths and Environment are
+  // settings, not draft values, so they stay.
+  const clearBtn = $('clear-draft');
+  clearBtn.addEventListener('click', async () => {
+    ['f-asset', 'f-svcname', 'f-endpoint', 'f-status', 'f-maxms', 'f-payload', 'f-expected',
+     'f-raml', 'f-binary', 'mft-url', 'mft-user', 'mft-pass', 'mft-file']
+      .forEach(id => { const el = $(id); if (el) el.value = ''; });
+    ['f-method', 'f-endpointtype', 'f-auth', 'f-bodyfmt'].forEach(id => {
+      const el = $(id); if (!el) return;
+      const def = [...el.options].findIndex(o => o.defaultSelected);
+      el.selectedIndex = def < 0 ? 0 : def;
+    });
+    $('f-getbody').checked = false;
+    headers = [{ key: 'Accept', value: 'application/json' }];
+    formRows = [];
+    scenarios = { positive: true, negative: true };
+    try { localStorage.removeItem('thub-studio-draft'); } catch {}
+    try {
+      await fetch(API + '/api/draft', {
+        method: 'DELETE', headers: { 'Content-Type': 'application/json' }, body: '{}',
+      });
+    } catch { toast('Fields cleared, but the saved draft on the backend could not be deleted'); }
+    // Let the body-format handler re-sync Content-Type/Accept and the views.
+    $('f-bodyfmt').dispatchEvent(new Event('change'));
+    renderForm(); renderHeaders(); syncJsonFromTable(); refresh();
+    clearBtn.textContent = 'Cleared ✓';
+    setTimeout(() => clearBtn.textContent = 'Clear Draft', 1400);
+  });
+
+  const genBtn = rewire('btn-generate', async () => {
+    genBtn.disabled = true; genBtn.textContent = 'Generating…';
+    try {
+      const r = await fetch(API + '/api/generate', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(collectForm()),
+      });
+      const j = await r.json();
+      if (j.ok) {
+        lastGen = { timings: j.timings || {}, totalTime: j.totalTime || 0, at: Date.now() };
+        toast(j.rows + ' test rows written · sheet "' + j.sheet + '" · ' + j.files.length + ' files created in your repo');
+        $('pv-pill').textContent = 'Generated';
+        $('pv-pill').style.cssText = 'display:inline-flex;color:var(--success-text);background:rgba(46,173,110,.12);border:1px solid rgba(46,173,110,.3)';
+        $('pv-meta').textContent = 'Written ' + new Date().toLocaleTimeString('en-ZA', { hour: '2-digit', minute: '2-digit' }) + ' · ' + j.files.join(' · ');
+      } else {
+        toast('Generate failed: ' + (j.error || 'unknown error'));
+      }
+    } catch { toast('Backend not reachable — is app.py running?'); }
+    genBtn.disabled = false; genBtn.textContent = 'Generate Test Assets';
+    refresh();
+  });
+
+  // ── Test Runner — replaces the Generated Files tab ──────────────────────
+  (function initRunner() {
+    const host = $('tab-files');
+    host.innerHTML = `
+      <div style="display:flex;flex-direction:column;height:calc(100vh - 240px);min-height:560px;gap:10px">
+        <div style="display:flex;align-items:center;gap:9px">
+          <span style="font-size:12.5px;font-weight:700;color:var(--text-hi)">Framework Monitor</span>
+          <span class="hint" style="margin:0">watching <span class="mono" id="run-watch"></span></span>
+          <span style="flex:1"></span>
+          <button class="btn" id="run-refresh" style="font-size:12px;padding:6px 11px">↻ Refresh</button>
+        </div>
+        <div id="run-tree" class="scroll" style="flex:none;max-height:150px;overflow-y:auto;display:flex;flex-direction:column;gap:6px"></div>
+        <div id="run-term" class="scroll mono" style="flex:1;min-height:420px;overflow-y:auto;overflow-x:hidden;background:#04070C;border:1px solid var(--border-3);border-radius:12px;padding:12px 14px;font-size:12px;line-height:1.65;white-space:pre-wrap;overflow-wrap:anywhere;word-break:break-word;color:#C9D3E0">
+<span style="color:var(--muted)">TestHub Runner — select a .test.ts above, then Execute Tests.
+Output of  npx cross-env ENVIRONMENT=&lt;env&gt; playwright test &lt;spec&gt;  streams here live.</span></div>
+        <div style="display:flex;align-items:center;gap:10px">
+          <span class="hint" style="margin:0">Environment: <b class="mono" id="run-env"></b> · selected: <span class="mono" id="run-sel" style="color:var(--accent-text)">none</span></span>
+          <span style="flex:1"></span>
+          <button class="btn" id="run-stop" style="display:none;color:var(--danger)">■ Stop</button>
+          <button class="btn" id="run-smart" disabled title="Capture what the service actually returns, heal the governed excel, then rerun for clean evidence. DEV/SIT/UAT/PROD only — never MOCK.">⚡ Smart Run</button>
+          <button class="btn primary" id="run-exec" disabled>▶ Execute Tests</button>
+        </div>
+      </div>`;
+    // hide the old generated-files views if present
+    ['files-empty','files-view'].forEach(id => { const el = document.getElementById(id); if (el) el.style.display='none'; });
+
+    let selected = null, repoRoot = null, currentRun = null, es = null;
+    const term = $('run-term');
+    const write = (line, color) => {
+      const s = document.createElement('span');
+      if (color) s.style.color = color;
+      // simple CLI colorization
+      if (!color) {
+        if (/✓|passed/i.test(line)) s.style.color = '#4FD98C';
+        else if (/✘|✗|failed|Error|error:/i.test(line)) s.style.color = '#F0483E';
+        else if (/^\$ /.test(line)) s.style.color = 'var(--accent-text)';
+        else if (/warning/i.test(line)) s.style.color = 'var(--warn-text)';
+      }
+      s.textContent = line + '\n';
+      term.appendChild(s);
+      term.scrollTop = term.scrollHeight;
+    };
+
+    async function loadTree() {
+      $('run-watch').textContent = cleanPath(paths.spec) + '  ·  ' + cleanPath(paths.request);
+      $('run-env').textContent = $('f-env').value;
+      const qs = 'spec=' + encodeURIComponent(paths.spec) + '&request=' + encodeURIComponent(paths.request);
+      try {
+        const j = await (await fetch('/api/tests?' + qs)).json();
+        if (!j.ok) { $('run-tree').innerHTML = '<div class="hint">' + (j.error||'Could not read framework paths') + '</div>'; return; }
+        repoRoot = j.repoRoot;
+        if (!j.assets.length) { $('run-tree').innerHTML = '<div class="hint">No .test.ts files found yet — generate assets first, then ↻ Refresh.</div>'; return; }
+        $('run-tree').innerHTML = j.assets.map(a =>
+          '<div style="background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:9px 12px">'
+          + '<div style="font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-bottom:6px">' + a.asset + '</div>'
+          + a.tests.map(t => '<label style="display:flex;align-items:center;gap:8px;width:auto;padding:3px 0;cursor:pointer">'
+            + '<input type="radio" name="run-pick" style="width:auto" data-rel="' + t.rel + '" data-name="' + t.name + '">'
+            + '<span class="mono" style="font-size:12.5px;color:var(--text-2)">' + t.name + '</span>'
+            + '<span class="chip mono" style="background:rgba(76,158,240,.12);color:#5AA6F5">test.ts</span></label>').join('')
+          + a.data.map(d => '<div style="display:flex;align-items:center;gap:8px;padding:3px 0 3px 24px">'
+            + '<span class="mono" style="font-size:12px;color:var(--muted)">' + d.name + '</span>'
+            + '<span class="chip mono" style="background:var(--fill-1);color:var(--text-sec)">data.ts</span></div>').join('')
+          + '</div>').join('');
+        $('run-tree').querySelectorAll('input[name="run-pick"]').forEach(r => r.addEventListener('change', e => {
+          selected = { rel: e.target.dataset.rel, name: e.target.dataset.name };
+          $('run-sel').textContent = selected.rel;
+          $('run-exec').disabled = false;
+        }));
+      } catch { $('run-tree').innerHTML = '<div class="hint">Backend not reachable.</div>'; }
+    }
+
+    $('run-refresh').addEventListener('click', loadTree);
+    // Refresh the Framework Monitor each time the Generated Assets tab is opened,
+    // so newly generated files show up without needing a manual ↻ Refresh.
+    const filesTabBtn = document.querySelector('[data-tab="files"]');
+    if (filesTabBtn) filesTabBtn.addEventListener('click', loadTree);
+    $('f-env').addEventListener('change', () => $('run-env').textContent = $('f-env').value);
+
+    // Smart Run is gated in the UI as well as the backend — the button is the
+    // first place a tester finds out MOCK is out of scope, and finding out from
+    // a rejected request after a click is worse than not being able to click.
+    const HEAL_ENVIRONMENTS = ['dev', 'sit', 'uat', 'prod'];
+    function syncSmartRun() {
+      const btn = $('run-smart');
+      if (!btn) return;
+      const env = ($('f-env').value || '').toLowerCase();
+      const inScope = HEAL_ENVIRONMENTS.includes(env);
+      btn.disabled = !selected || !inScope;
+      btn.title = inScope
+        ? 'Capture what the service actually returns, heal the governed excel, then rerun for clean evidence.'
+        : `Smart Run applies on ${HEAL_ENVIRONMENTS.map(e => e.toUpperCase()).join(', ')} only, never MOCK. Selected: ${env.toUpperCase()}.`;
+    }
+    $('f-env').addEventListener('change', syncSmartRun);
+
+    $('run-smart').addEventListener('click', async () => {
+      if (!selected) return;
+      term.innerHTML = '';
+      $('run-smart').disabled = true; $('run-exec').disabled = true;
+      $('run-stop').style.display = 'inline-flex';
+      const j = await (await fetch('/api/smart-run', { method:'POST', headers:{'Content-Type':'application/json'},
+        body: JSON.stringify({ rel: selected.rel, environment: $('f-env').value }) })).json();
+      if (!j.ok) {
+        write('[smart-run] ' + (j.error||'failed to start'), '#F0483E');
+        $('run-exec').disabled = false; $('run-stop').style.display='none'; syncSmartRun(); return;
+      }
+      currentRun = j.runId;
+      es = new EventSource('/api/run/' + currentRun + '/stream');
+      es.onmessage = e => { try { write(JSON.parse(e.data).line); } catch {} };
+      es.addEventListener('end', e => {
+        let report = null;
+        try { const d = JSON.parse(e.data); report = d.report; } catch {}
+        es.close(); es = null; currentRun = null;
+        $('run-exec').disabled = false; $('run-stop').style.display = 'none'; syncSmartRun();
+        // Same contract as Execute Tests: the report is served THROUGH /api/report
+        // with this run's path, never opened from disk and never falling back to
+        // whatever HTML is newest. A smart run that produced none says so.
+        if (report) {
+          showReport('/api/report?' + new URLSearchParams({ path: report }).toString(), report);
+        } else {
+          write('');
+          write('[smart-run] this run produced no Ortoni report', '#E2B15A');
+        }
+      });
+    });
+
+    $('run-exec').addEventListener('click', async () => {
+      if (!selected) return;
+      term.innerHTML = '';
+      $('run-exec').disabled = true; $('run-stop').style.display = 'inline-flex';
+      const j = await (await fetch('/api/run', { method:'POST', headers:{'Content-Type':'application/json'},
+        body: JSON.stringify({ rel: selected.rel, environment: $('f-env').value, repoRoot }) })).json();
+      if (!j.ok) { write('[runner] ' + (j.error||'failed to start'), '#F0483E'); $('run-exec').disabled = false; $('run-stop').style.display='none'; return; }
+      currentRun = j.runId;
+      es = new EventSource('/api/run/' + currentRun + '/stream');
+      let runStats = { passed: null, failed: null };
+      es.onmessage = e => { try {
+        const line = JSON.parse(e.data).line; write(line);
+        const mp = /(\d+)\s+passed/i.exec(line); if (mp) runStats.passed = +mp[1];
+        const mf = /(\d+)\s+failed/i.exec(line); if (mf) runStats.failed = +mf[1];
+      } catch {} };
+      es.addEventListener('end', e => {
+        let code = -1, report = null, reportLabel = 'Report';
+        try {
+          const d = JSON.parse(e.data);
+          code = d.exit; report = d.report; reportLabel = d.reportLabel || reportLabel;
+        } catch {}
+        write('');
+        write(code === 0 ? '── All tests completed · exit 0 ──' : '── Run finished · exit ' + code + ' ──',
+              code === 0 ? '#4FD98C' : '#F0483E');
+        // Every framework opens ITS OWN standard report: Ortoni for the
+        // Playwright-native suites, and k6's, ZAP's, garak's or mobilewright's own
+        // HTML for the tools that cannot host Ortoni. A run that produced no report
+        // now SAYS so. It used to fall through to /api/report with no path, which
+        // served the newest Ortoni HTML lying around, so a k6 run displayed some
+        // earlier Playwright run's report as its evidence.
+        write('');
+        // Feed the View Results tab from THIS run's report path only. No stale
+        // report is ever shown (EVID-1): if the run named none, the tab says so.
+        const rv = document.getElementById('results-view');
+        const re = document.getElementById('results-empty');
+        if (report) {
+          const reportUrl = '/api/report?' + new URLSearchParams({ path: report }).toString();
+          const frame = document.getElementById('results-frame');
+          if (frame) frame.src = reportUrl;
+          const verdict = document.getElementById('results-verdict');
+          if (verdict) {
+            const ok = code === 0;
+            verdict.textContent = ok ? 'PASS' : 'FAIL';
+            verdict.style.background = ok ? 'rgba(46,173,110,.16)' : 'rgba(240,72,62,.16)';
+            verdict.style.color = ok ? 'var(--success-text)' : '#F0483E';
+          }
+          const sum = document.getElementById('results-summary');
+          if (sum) {
+            const bits = [];
+            if (runStats.passed != null) bits.push(runStats.passed + ' passed');
+            if (runStats.failed != null) bits.push(runStats.failed + ' failed');
+            sum.textContent = (bits.join(' · ') || (reportLabel + ' report')) + ' · exit ' + code;
+          }
+          const nm = document.getElementById('results-name');
+          if (nm) nm.textContent = report.split('/').pop();
+          const fs = document.getElementById('results-fullscreen');
+          if (fs) { fs.href = reportUrl; fs.target = '_blank'; fs.rel = 'noopener'; }
+          if (rv) rv.style.display = 'flex';
+          if (re) re.style.display = 'none';
+          const rtab = document.querySelector('[data-tab="results"]');
+          if (rtab) rtab.click();
+          write(reportLabel + ' results are in the View Results tab.', '#7F9CC4');
+        } else {
+          if (rv) rv.style.display = 'none';
+          if (re) re.style.display = 'flex';
+          write('This run produced no ' + reportLabel + ' report.', 'var(--warn-text)');
+        }
+        es.close(); es = null; currentRun = null;
+        $('run-exec').disabled = false; $('run-stop').style.display = 'none';
+      });
+      es.onerror = () => { if (es) { write('[runner] stream interrupted', 'var(--warn-text)'); es.close(); es=null; $('run-exec').disabled=false; $('run-stop').style.display='none'; } };
+    });
+
+    $('run-stop').addEventListener('click', async () => {
+      if (!currentRun) return;
+      await fetch('/api/run/' + currentRun + '/stop', { method: 'POST' });
+      write('[runner] stop requested', 'var(--warn-text)');
+    });
+
+    loadTree();
+  })();
+
+  // restore the last server-side draft on load (server draft wins over localStorage)
+  fetch(API + '/api/draft').then(r => r.json()).then(j => {
+    const d = j.draft; if (!d) return;
+    $('f-asset').value = d.assetName || $('f-asset').value;
+    $('f-svcname').value = d.serviceName || $('f-svcname').value;
+    $('f-method').value = d.method || $('f-method').value;
+    $('f-endpoint').value = d.endpoint || $('f-endpoint').value;
+    $('f-auth').value = d.authType && d.authType !== 'apikey' ? d.authType : $('f-auth').value;
+    $('f-status').value = d.expectedStatus || $('f-status').value;
+    $('f-maxms').value = d.maxResponseMs || $('f-maxms').value;
+    $('f-payload').value = d.requestPayload || $('f-payload').value;
+    $('f-expected').value = d.expectedResponse || $('f-expected').value;
+    $('f-getbody').checked = !!d.getBody;
+    if (d.headers && Object.keys(d.headers).length) {
+      headers = Object.entries(d.headers).map(([k, v]) => ({ key: k, value: String(v) }));
+      renderHeaders(); syncJsonFromTable();
+    }
+    if (d.paths) { paths = { ...paths, ...d.paths }; refreshPathHints(); }
+    scenarios = { positive: d.positive !== false, negative: d.negative !== false };
+    refresh();
+  }).catch(() => {});
+})();
+</script>
+</body>
+</html>

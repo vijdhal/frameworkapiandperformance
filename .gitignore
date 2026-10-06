@@ -1,0 +1,26 @@
+# Dependencies / environments
+node_modules/
+.venv*/
+venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# Secrets / local auth
+.env
+.env.local
+!.env.example
+.sf/
+.sfdx/
+
+# Build output
+build/
+dist/
+
+# Generated reports / logs
+reports/
+test-results/
+ortoni-report/
+logs/
+*.log
+*.zip

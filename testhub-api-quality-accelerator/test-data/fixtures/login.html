@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>TestHub Fixture — Login</title>
+<style>
+  body{font-family:-apple-system,Segoe UI,Roboto,sans-serif;background:#f3f3f3;margin:0;
+       display:flex;align-items:center;justify-content:center;height:100vh}
+  .card{background:#fff;padding:32px 36px;border-radius:8px;box-shadow:0 2px 12px rgba(0,0,0,.12);width:320px}
+  h1{font-size:18px;margin:0 0 20px}
+  label{display:block;font-size:12px;color:#444;margin:12px 0 4px}
+  input{width:100%;padding:9px 10px;border:1px solid #c9c9c9;border-radius:4px;font-size:14px;box-sizing:border-box}
+  button{width:100%;margin-top:18px;padding:10px;background:#0176d3;color:#fff;border:0;border-radius:4px;
+         font-size:14px;cursor:pointer}
+  button:disabled{background:#9dc7ec;cursor:not-allowed}
+  #error{display:none;margin-top:14px;padding:9px 11px;background:#fdeaea;border:1px solid #f2a9a9;
+         border-radius:4px;color:#a4262c;font-size:13px}
+  #AppLauncher{display:none}
+  .app{background:#fff;padding:32px 36px;border-radius:8px;box-shadow:0 2px 12px rgba(0,0,0,.12);width:360px}
+</style>
+</head>
+<body>
+
+<!--
+  TestHub offline fixture.
+
+  Exists so a generated UI spec can be proven end to end with NO network and NO
+  client environment — which is what makes the UI engine verifiable on a laptop
+  and in CI. Element ids deliberately mirror the Salesforce login page
+  (#username, #password, #Login, #AppLauncher) so the same generated journey
+  shape points at a real org by changing only the Base URL.
+
+  Valid credentials: testhub / Passw0rd!
+-->
+
+<div class="card" id="loginCard">
+  <h1>Sign in</h1>
+  <label for="username">Username</label>
+  <input id="username" name="username" type="text" autocomplete="off">
+  <label for="password">Password</label>
+  <input id="password" name="password" type="password" autocomplete="off">
+  <button id="Login" type="button">Log In</button>
+  <div id="error" role="alert"></div>
+</div>
+
+<div class="app" id="AppLauncher">
+  <h1>App Launcher</h1>
+  <p id="welcome"></p>
+  <button id="logout" type="button">Log Out</button>
+</div>
+
+<script>
+  var VALID_USER = 'testhub';
+  var VALID_PASS = 'Passw0rd!';
+
+  function $(id) { return document.getElementById(id); }
+
+  function showError(msg) {
+    var e = $('error');
+    e.textContent = msg;
+    e.style.display = 'block';
+  }
+
+  $('Login').addEventListener('click', function () {
+    var u = $('username').value.trim();
+    var p = $('password').value;
+    $('error').style.display = 'none';
+
+    if (!u || !p) { showError('Please enter your username and password.'); return; }
+    if (u !== VALID_USER || p !== VALID_PASS) { showError("Please check your username and password. If you still can't log in, contact your administrator."); return; }
+
+    $('loginCard').style.display = 'none';
+    $('AppLauncher').style.display = 'block';
+    $('welcome').textContent = 'Welcome, ' + u;
+    document.title = 'TestHub Fixture — Home';
+    if (location.hash !== '#/home') location.hash = '#/home';
+  });
+
+  $('logout').addEventListener('click', function () {
+    $('AppLauncher').style.display = 'none';
+    $('loginCard').style.display = 'block';
+    $('username').value = '';
+    $('password').value = '';
+    document.title = 'TestHub Fixture — Login';
+    location.hash = '';
+  });
+</script>
+</body>
+</html>

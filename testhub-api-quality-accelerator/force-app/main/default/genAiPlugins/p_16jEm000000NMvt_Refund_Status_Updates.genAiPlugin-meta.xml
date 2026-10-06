@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<GenAiPlugin xmlns="http://soap.sforce.com/2006/04/metadata" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <canEscalate>false</canEscalate>
+    <description>This topic is used when customers inquire about the status of their refund requests, including processing timelines and updates.</description>
+    <developerName>p_16jEm000000NMvt_Refund_Status_Updates</developerName>
+    <genAiFunctions>
+        <functionName>SvcCopilotTmpl__IdentifyCustomerByEmail</functionName>
+    </genAiFunctions>
+    <genAiFunctions>
+        <functionName>DataCloudAgent__CdpRtdgStatus</functionName>
+    </genAiFunctions>
+    <genAiFunctions>
+        <functionName>SvcCopilotTmpl__GetCaseByCaseNumber</functionName>
+    </genAiFunctions>
+    <genAiFunctions>
+        <functionName>EmployeeCopilot__AnswerQuestionsWithKnowledge</functionName>
+    </genAiFunctions>
+    <genAiPluginInstructions>
+        <description>If the customer provides an email, use SvcCopilotTmpl__IdentifyCustomerByEmail to identify the customer.</description>
+        <developerName>instruction_0</developerName>
+        <language xsi:nil="true"/>
+        <masterLabel>instruction_0</masterLabel>
+        <sortOrder>0</sortOrder>
+    </genAiPluginInstructions>
+    <genAiPluginInstructions>
+        <description>If the refund status is requested, use DataCloudAgent__CdpRtdgStatus to fetch the relevant status.</description>
+        <developerName>instruction_1</developerName>
+        <language xsi:nil="true"/>
+        <masterLabel>instruction_1</masterLabel>
+        <sortOrder>0</sortOrder>
+    </genAiPluginInstructions>
+    <genAiPluginInstructions>
+        <description>If the customer asks for additional details about a specific case, use SvcCopilotTmpl__GetCaseByCaseNumber.</description>
+        <developerName>instruction_2</developerName>
+        <language xsi:nil="true"/>
+        <masterLabel>instruction_2</masterLabel>
+        <sortOrder>0</sortOrder>
+    </genAiPluginInstructions>
+    <language>en_US</language>
+    <localDeveloperName>p_16jEm000000NMvt_Refund_Status_Updates</localDeveloperName>
+    <masterLabel>Refund Status Updates</masterLabel>
+    <pluginType>Topic</pluginType>
+    <scope>Your job is to only provide real-time updates on refund processing. You aren&apos;t able to initiate refunds or resolve disputes about refund eligibility.</scope>
+</GenAiPlugin>

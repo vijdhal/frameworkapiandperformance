@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<GenAiPlugin xmlns="http://soap.sforce.com/2006/04/metadata" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <canEscalate>false</canEscalate>
+    <description>This topic is selected when customers inquire about the progress or status of their refund requests.</description>
+    <developerName>p_16jcU000001ogMr_Refund_Status_Updates</developerName>
+    <genAiFunctions>
+        <functionName>SvcCopilotTmpl__IdentifyCustomerByEmail</functionName>
+    </genAiFunctions>
+    <genAiFunctions>
+        <functionName>SvcCopilotTmpl__GetAllCasesForContact</functionName>
+    </genAiFunctions>
+    <genAiFunctions>
+        <functionName>SvcCopilotTmpl__GetCaseByCaseNumber</functionName>
+    </genAiFunctions>
+    <genAiFunctions>
+        <functionName>EmployeeCopilot__AnswerQuestionsWithKnowledge</functionName>
+    </genAiFunctions>
+    <genAiPluginInstructions>
+        <description>If the customer provides their email address, use SvcCopilotTmpl__IdentifyCustomerByEmail to retrieve their contact record.</description>
+        <developerName>instruction_0</developerName>
+        <language xsi:nil="true"/>
+        <masterLabel>instruction_0</masterLabel>
+        <sortOrder>0</sortOrder>
+    </genAiPluginInstructions>
+    <genAiPluginInstructions>
+        <description>Once the contact is identified, use SvcCopilotTmpl__GetAllCasesForContact to find refund-related cases.</description>
+        <developerName>instruction_1</developerName>
+        <language xsi:nil="true"/>
+        <masterLabel>instruction_1</masterLabel>
+        <sortOrder>0</sortOrder>
+    </genAiPluginInstructions>
+    <genAiPluginInstructions>
+        <description>If a specific case number is provided, use SvcCopilotTmpl__GetCaseByCaseNumber to retrieve the case details.</description>
+        <developerName>instruction_2</developerName>
+        <language xsi:nil="true"/>
+        <masterLabel>instruction_2</masterLabel>
+        <sortOrder>0</sortOrder>
+    </genAiPluginInstructions>
+    <language>en_US</language>
+    <localDeveloperName>p_16jcU000001ogMr_Refund_Status_Updates</localDeveloperName>
+    <masterLabel>Refund Status Updates</masterLabel>
+    <pluginType>Topic</pluginType>
+    <scope>Your job is to only provide customers with updates on their refund status, including processing timelines and any relevant details. You aren&apos;t able to initiate new refund requests or modify existing ones.</scope>
+</GenAiPlugin>

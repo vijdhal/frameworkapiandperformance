@@ -1,0 +1,11 @@
+{
+  "dev": {
+    "baseUrl": "https://reqres.in"
+  },
+  "qa": {
+    "baseUrl": "https://your-api-qa.example.com"
+  },
+  "sit": {
+    "baseUrl": "https://your-api-sit.example.com"
+  }
+}

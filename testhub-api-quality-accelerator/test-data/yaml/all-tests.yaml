@@ -1,0 +1,18 @@
+- name: User Flow
+  steps:
+    - name: Login
+      endpoint: /api/login
+      method: POST
+      requestBody:
+        email: eve.holt@reqres.in
+        password: cityslicka
+      save:
+        token: token
+
+    - name: Get User
+      endpoint: /api/users/2
+      method: GET
+      expected:
+        status: 200
+        body:
+          data.id: 2

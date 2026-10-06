@@ -1,0 +1,27 @@
+openapi: 3.0.0
+info:
+  title: ReqRes API
+  version: 1.0.0
+
+paths:
+  /api/users/2:
+    get:
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: number
+                      email:
+                        type: string
+                      first_name:
+                        type: string
+                      last_name:
+                        type: string

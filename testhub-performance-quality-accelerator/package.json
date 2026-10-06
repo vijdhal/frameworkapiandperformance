@@ -1,0 +1,25 @@
+{
+  "name": "k6-performance-framework",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "new-endpoint": "node scripts/new-endpoint.mjs",
+    "createuser:gen": "node scripts/excel-to-scenario.mjs --file tests/createuser/createuser.xlsx --out-dir tests/createuser",
+    "createuser:smoke": "npm run createuser:gen && k6 run -e ENV=dev tests/createuser/createuser-smoke-test.js",
+    "createuser:load": "npm run createuser:gen && k6 run -e ENV=dev tests/createuser/createuser-load-test.js",
+    "sampletestsize-sampletestsize:gen": "node scripts/excel-to-scenario.mjs --file tests/sampletestsize-sampletestsize/sampletestsize-sampletestsize.xlsx --out-dir tests/sampletestsize-sampletestsize",
+    "sampletestsize-sampletestsize:smoke": "npm run sampletestsize-sampletestsize:gen && k6 run -e ENV=dev tests/sampletestsize-sampletestsize/sampletestsize-sampletestsize-smoke-test.js",
+    "sampletestsize-sampletestsize:load": "npm run sampletestsize-sampletestsize:gen && k6 run -e ENV=dev tests/sampletestsize-sampletestsize/sampletestsize-sampletestsize-load-test.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "dotenv": "^17.4.2"
+  },
+  "devDependencies": {
+    "html-reporter": "^11.9.3",
+    "xlsx": "https://cdn.sheetjs.com/xlsx-0.20.3/xlsx-0.20.3.tgz"
+  }
+}

@@ -1,0 +1,21 @@
+- name: Login
+  endpoint: /api/login
+  method: POST
+
+  requestBody:
+    email: eve.holt@reqres.in
+    password: cityslicka
+
+  save:
+    token: token
+
+  expected:
+    status: 200
+
+- name: Get User
+  endpoint: /api/users/2
+  method: GET
+
+  expected:
+    status: 200
+    file: test-data/json/user-response.json

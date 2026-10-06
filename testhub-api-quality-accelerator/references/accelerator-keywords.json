@@ -1,0 +1,356 @@
+{
+  "browser": {
+    "openBrowser": [
+      {
+        "name": "browserName",
+        "optional": true
+      },
+      {
+        "name": "options",
+        "optional": true
+      }
+    ],
+    "openURL": [
+      {
+        "name": "url",
+        "optional": false
+      },
+      {
+        "name": "browserName",
+        "optional": true
+      },
+      {
+        "name": "options",
+        "optional": true
+      }
+    ],
+    "goToURL": [
+      {
+        "name": "url",
+        "optional": false
+      }
+    ],
+    "closeBrowser": [],
+    "closeAllBrowsers": [],
+    "closeCurrentWindow": [],
+    "refreshPage": [],
+    "getCurrentUrl": [],
+    "getTitle": [],
+    "maximizeWindow": [],
+    "minimizeWindow": []
+  },
+  "element": {
+    "click": [
+      {
+        "name": "locator",
+        "optional": false
+      },
+      {
+        "name": "options",
+        "optional": true
+      }
+    ],
+    "fill": [
+      {
+        "name": "locator",
+        "optional": false
+      },
+      {
+        "name": "value",
+        "optional": false
+      },
+      {
+        "name": "options",
+        "optional": true
+      }
+    ],
+    "type": [
+      {
+        "name": "locator",
+        "optional": false
+      },
+      {
+        "name": "text",
+        "optional": false
+      },
+      {
+        "name": "options",
+        "optional": true
+      }
+    ],
+    "selectDropdown": [
+      {
+        "name": "locator",
+        "optional": false
+      },
+      {
+        "name": "value",
+        "optional": false
+      },
+      {
+        "name": "options",
+        "optional": true
+      }
+    ],
+    "selectDropdownByIndex": [
+      {
+        "name": "locator",
+        "optional": false
+      },
+      {
+        "name": "index",
+        "optional": false
+      },
+      {
+        "name": "options",
+        "optional": true
+      }
+    ],
+    "hover": [
+      {
+        "name": "locator",
+        "optional": false
+      },
+      {
+        "name": "options",
+        "optional": true
+      }
+    ],
+    "pressKey": [
+      {
+        "name": "locator",
+        "optional": false
+      },
+      {
+        "name": "key",
+        "optional": false
+      },
+      {
+        "name": "options",
+        "optional": true
+      }
+    ],
+    "doubleClick": [
+      {
+        "name": "locator",
+        "optional": false
+      },
+      {
+        "name": "options",
+        "optional": true
+      }
+    ],
+    "rightClick": [
+      {
+        "name": "locator",
+        "optional": false
+      },
+      {
+        "name": "options",
+        "optional": true
+      }
+    ],
+    "scrollIntoViewIfNeeded": [
+      {
+        "name": "locator",
+        "optional": false
+      },
+      {
+        "name": "options",
+        "optional": true
+      }
+    ],
+    "waitForVisible": [
+      {
+        "name": "locator",
+        "optional": false
+      },
+      {
+        "name": "options",
+        "optional": true
+      }
+    ],
+    "waitForHidden": [
+      {
+        "name": "locator",
+        "optional": false
+      },
+      {
+        "name": "options",
+        "optional": true
+      }
+    ],
+    "waitForSpinnerHidden": [
+      {
+        "name": "options",
+        "optional": true
+      }
+    ],
+    "getText": [
+      {
+        "name": "locator",
+        "optional": false
+      },
+      {
+        "name": "options",
+        "optional": true
+      }
+    ],
+    "getInputValue": [
+      {
+        "name": "locator",
+        "optional": false
+      },
+      {
+        "name": "options",
+        "optional": true
+      }
+    ],
+    "isVisible": [
+      {
+        "name": "locator",
+        "optional": false
+      }
+    ],
+    "isEnabled": [
+      {
+        "name": "locator",
+        "optional": false
+      }
+    ],
+    "isChecked": [
+      {
+        "name": "locator",
+        "optional": false
+      }
+    ],
+    "isEditable": [
+      {
+        "name": "locator",
+        "optional": false
+      }
+    ],
+    "verifyText": [
+      {
+        "name": "locator",
+        "optional": false
+      },
+      {
+        "name": "expectedText",
+        "optional": false
+      },
+      {
+        "name": "options",
+        "optional": true
+      }
+    ],
+    "verifyVisible": [
+      {
+        "name": "locator",
+        "optional": false
+      },
+      {
+        "name": "options",
+        "optional": true
+      }
+    ],
+    "verifyHidden": [
+      {
+        "name": "locator",
+        "optional": false
+      },
+      {
+        "name": "options",
+        "optional": true
+      }
+    ],
+    "verifyEnabled": [
+      {
+        "name": "locator",
+        "optional": false
+      },
+      {
+        "name": "options",
+        "optional": true
+      }
+    ],
+    "verifyDisabled": [
+      {
+        "name": "locator",
+        "optional": false
+      },
+      {
+        "name": "options",
+        "optional": true
+      }
+    ],
+    "verifyChecked": [
+      {
+        "name": "locator",
+        "optional": false
+      },
+      {
+        "name": "options",
+        "optional": true
+      }
+    ],
+    "verifyCount": [
+      {
+        "name": "locator",
+        "optional": false
+      },
+      {
+        "name": "count",
+        "optional": false
+      },
+      {
+        "name": "options",
+        "optional": true
+      }
+    ],
+    "verifyAttribute": [
+      {
+        "name": "locator",
+        "optional": false
+      },
+      {
+        "name": "attribute",
+        "optional": false
+      },
+      {
+        "name": "expectedValue",
+        "optional": false
+      },
+      {
+        "name": "options",
+        "optional": true
+      }
+    ],
+    "verifyURL": [
+      {
+        "name": "expected",
+        "optional": false
+      },
+      {
+        "name": "options",
+        "optional": true
+      }
+    ],
+    "captureScreenshot": [
+      {
+        "name": "name",
+        "optional": true
+      }
+    ],
+    "uploadFile": [
+      {
+        "name": "locator",
+        "optional": false
+      },
+      {
+        "name": "filePaths",
+        "optional": false
+      }
+    ]
+  }
+}

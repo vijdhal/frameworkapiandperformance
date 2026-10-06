@@ -1,0 +1,26 @@
+import { chromium } from 'playwright';
+const PORT = process.env.PORT || '5000';
+const b = await chromium.launch(); const p = await b.newPage({viewport:{width:1512,height:950}});
+const errs=[]; p.on('pageerror',e=>errs.push(e.message));
+await p.goto('http://127.0.0.1:'+PORT,{waitUntil:'networkidle'});
+await p.evaluate(()=>localStorage.setItem('thub-studio-paths-v2',JSON.stringify({request:'test-data/qa/req',spec:'test-data/qa/spec',excel:'test-data/qa/xl',response:'test-data/qa/json'})));
+await p.reload({waitUntil:'networkidle'});
+// MFT 4-field present
+await p.selectOption('#f-bodyfmt','MFT'); await p.waitForTimeout(400);
+const has4=(await p.$('#mft-url'))&&(await p.$('#mft-user'))&&(await p.$('#mft-pass'))&&(await p.$('#mft-file'));
+const noSftp=(await p.$('#mft-transport'))===null&&(await p.$('#mft-key'))===null;
+console.log('MFT 4 fields:', !!has4, '| no SFTP fields:', noSftp);
+await p.fill('#f-asset','getuser1'); await p.fill('#f-svcname','transfer'); await p.fill('#f-endpoint','/upload');
+await p.fill('#mft-url','https://portal.example.com/dropbox'); await p.fill('#mft-user','svc'); await p.fill('#mft-pass','MFT_PASSWORD'); await p.fill('#mft-file','test-data/files/payload.csv');
+await p.fill('#f-status','200'); await p.waitForTimeout(400);
+const sm=await p.locator('#summary-cards').textContent();
+console.log('Summary MFT-aware:', sm.includes('MFT Zone')||sm.includes('Destination'));
+await p.selectOption('#f-bodyfmt','JSON'); await p.waitForTimeout(400);
+const js=await p.locator('#summary-cards').textContent();
+console.log('JSON summary Method+Body Format:', js.includes('Method')&&js.includes('Body Format'));
+await p.selectOption('#f-bodyfmt','MFT'); await p.waitForTimeout(300);
+await p.click('#btn-generate'); await p.waitForTimeout(1600);
+const al=await p.locator('#asset-list').textContent();
+console.log('Gen-time counter:', /assets generated/.test(al)&&/s total/.test(al));
+console.log('JS errors:', errs.length?JSON.stringify(errs):'none');
+await b.close();
